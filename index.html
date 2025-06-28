@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Ejecutivo de Rendimiento Digital - 2win.cl</title>
+    <title>Reporte Ejecutivo de Rendimiento Digital - 2win.cl</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <style>
@@ -16,6 +16,9 @@
             --text-color: #333;
             --light-text-color: #666;
             --border-color: #e0e0e0;
+            --success-color: #2e7d32;
+            --warning-color: #ff8f00;
+            --danger-color: #c62828;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -51,11 +54,11 @@
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             padding: 25px;
-            grid-column: span 4;
             display: flex;
             flex-direction: column;
         }
         .card.full-width { grid-column: span 12; }
+        .card.two-thirds-width { grid-column: span 8; }
         .card.half-width { grid-column: span 6; }
         .card.third-width { grid-column: span 4; }
         
@@ -106,8 +109,8 @@
             line-height: 1.6;
         }
         .table-container {
-            max-height: 400px;
-            overflow-y: auto;
+            width: 100%;
+            overflow-x: auto;
         }
         table {
             width: 100%;
@@ -117,6 +120,7 @@
             padding: 14px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
         }
         th {
             background-color: #e8eaf6;
@@ -128,7 +132,6 @@
             background-color: #f5f5f5;
         }
         
-        /* Tooltip styles */
         .tooltip {
             position: relative;
             display: inline-block;
@@ -157,6 +160,14 @@
             visibility: visible;
             opacity: 1;
         }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--light-text-color);
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
@@ -169,127 +180,200 @@
 
         <div class="dashboard-grid">
 
-            <!-- Section 1: Executive Summary & Lead Generation -->
             <div class="card full-width">
-                <h2 class="card-title">Resumen Ejecutivo de Rendimiento</h2>
-                <div class="kpi-grid" style="margin-bottom: 30px;">
+                <h2 class="card-title">Resumen de Indicadores Clave (KPIs)</h2>
+                <div class="kpi-grid">
                     <div class="kpi-card">
                         <p class="kpi-value">45</p>
                         <p class="kpi-label">Leads Generados (Web)</p>
                     </div>
                      <div class="kpi-card">
-                        <p class="kpi-value">$14,4k</p>
+                        <p class="kpi-value" style="color: var(--success-color);">$14,4k</p>
                         <p class="kpi-label"><span class="tooltip">Costo por Lead (CPL)<span class="tooltiptext">Costo Promedio de Adquisición por cada lead generado. Se calcula dividiendo la inversión total en Ads por el número de leads de ese canal.</span></span></p>
                     </div>
                     <div class="kpi-card">
-                        <p class="kpi-value">1,500</p>
-                        <p class="kpi-label">Usuarios Totales Web</p>
+                        <p class="kpi-value" style="color: var(--success-color);">4.01%</p>
+                        <p class="kpi-label"><span class="tooltip">Tasa de Conv. (Ads)<span class="tooltiptext">Porcentaje de clics de anuncios que resultaron en un lead.</span></span></p>
                     </div>
                     <div class="kpi-card">
-                        <p class="kpi-value">524</p>
-                        <p class="kpi-label">Suscriptores (LinkedIn)</p>
+                        <p class="kpi-value">16.63%</p>
+                        <p class="kpi-label"><span class="tooltip">Visibilidad SEO<span class="tooltiptext">Métrica que representa qué tan visible es tu sitio en los resultados de búsqueda para tus palabras clave, comparado con tus competidores.</span></span></p>
                     </div>
-                </div>
-                 <div class="chart-container" style="min-height: 450px;">
-                    <canvas id="funnelChart"></canvas>
                 </div>
             </div>
             
-            <div class="card full-width insights">
-                <h3 class="card-title">Análisis Estratégico y Próximos Pasos</h3>
-                <ul>
-                    <li><strong>Eficacia de la Inversión: Google Ads es Nuestra Principal Fuente de Leads:</strong> La inversión en publicidad ha demostrado ser altamente efectiva, no solo como motor de tráfico, sino como la principal herramienta de conversión, generando <strong>35 de los 45 leads totales (78%)</strong>. El costo de adquisición por cada lead de este canal es de <strong>$18,500 CLP</strong>, un dato clave para medir el ROI y planificar futuras inversiones.</li>
-                     <li><strong>El Activo del SEO: Crecimiento Orgánico que Empieza a Convertir:</strong> El impresionante despegue de la visibilidad SEO (de 1.13% a casi 18%) ya está dando frutos concretos, generando <strong>10 leads (22% del total) sin costo directo por clic</strong>. Esto valida la estrategia de contenido y demuestra el enorme potencial de este canal para reducir el CPL general a futuro.</li>
-                     <li><strong>La Sinergia de Canales: El Camino Hacia la Eficiencia:</strong> El modelo actual es claro: Ads captura la demanda inmediata y SEO construye un activo a largo plazo. LinkedIn, por su parte, crea una audiencia de alto valor. La estrategia debe centrarse en optimizar la sinergia entre estos tres pilares.</li>
-                    <li><strong>Plan de Acción - Hacia la Optimización del ROI:</strong>
-                        <ul style="margin-top: 10px;">
-                            <li><strong>Optimización de la Conversión (CRO):</strong> Con un 3% de los usuarios web convirtiéndose en leads, la mayor oportunidad reside en mejorar este ratio. Es prioritario analizar el comportamiento en las páginas de destino y añadir CTAs más efectivos (demos, trials, contacto) en las páginas con más tráfico que no están convirtiendo.</li>
-                             <li><strong>Inversión Inteligente en Ads:</strong> Analizar las campañas y palabras clave que generan los leads más económicos ("erp para pymes chile") y considerar aumentar la inversión en ellas. A su vez, pausar o reevaluar las que consumen presupuesto sin convertir.</li>
-                             <li><strong>Monetización de la Audiencia:</strong> Desarrollar un plan de "lead nurturing" para los 524 suscriptores de LinkedIn, utilizando contenido de valor para guiarlos hacia una conversión en el sitio web.</li>
+             <div class="card full-width insights">
+                <h3 class="card-title">Análisis Estratégico y Plan de Acción</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
+                    <div>
+                        <h4>Diagnóstico Estratégico</h4>
+                        <ul>
+                            <li><strong>Motor de Leads:</strong> Google Ads es el principal generador de leads (78%), validando la inversión. El CPL general es de $18,514 CLP.</li>
+                            <li><strong>Activo a Futuro:</strong> El crecimiento explosivo de la visibilidad SEO ya aporta el 22% de los leads a costo $0, demostrando un enorme potencial de rentabilidad.</li>
+                            <li><strong>Dilema Calidad vs. Costo:</strong> La campaña "ERP para pymes" es la más económica en CPL ($7k) pero puede atraer leads no cualificados. "Netsuite Chile" tiene un CPL mayor ($12k) pero con una intención de compra superior.</li>
                         </ul>
-                    </li>
-                </ul>
+                    </div>
+                     <div>
+                        <h4>Plan de Acción Recomendado</h4>
+                        <ul>
+                             <li><strong>PRIORIDAD #1 - Optimizar la Conversión (CRO):</strong> Añadir CTAs (Demos, Descargas) en las páginas con más tráfico (Home, ERP Cloud) para convertir a los 1,500 usuarios que nos visitan.</li>
+                             <li><strong>PRIORIDAD #2 - Inversión Inteligente en Ads:</strong> Re-asignar presupuesto de campañas de bajo rendimiento de conversión a las de alto rendimiento cualificado ("Netsuite Chile").</li>
+                              <li><strong>PRIORIDAD #3 - Cualificar Leads:</strong> Implementar filtros en las landing pages de campañas amplias para separar los leads de alta y baja calidad y enfocar el esfuerzo comercial.</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
-            <!-- Section 2: Lead Generation Analysis -->
+
             <div class="card full-width">
-                 <h2 class="card-title">Análisis de Generación de Leads (Web)</h2>
+                 <h2 class="card-title">Análisis Detallado de Generación de Leads</h2>
             </div>
              <div class="card third-width">
-                <h3 class="card-title">Leads por Canal</h3>
+                <h3 class="card-title">Origen de Leads por Canal</h3>
                 <div class="chart-container">
                     <canvas id="leadSourceChart"></canvas>
                 </div>
             </div>
-            <div class="card two-thirds-width">
-                 <h3 class="card-title">Rendimiento de Leads por Campaña de Google Ads</h3>
-                <div class="table-container">
+             <div class="card two-thirds-width">
+                <h3 class="card-title">Evolución Diaria de Leads Generados (Web)</h3>
+                <div class="chart-container">
+                    <canvas id="dailyLeadsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card full-width">
+                <h3 class="card-title">Rendimiento Detallado por Campaña y Palabra Clave</h3>
+                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
                                 <th>Campaña / Palabra Clave</th>
-                                <th>Leads Generados</th>
-                                <th><span class="tooltip">Tasa de Conv.<span class="tooltiptext">Porcentaje de clics que resultaron en un lead para esta campaña específica.</span></span></th>
+                                <th>Canal</th>
+                                <th>Inversión (CLP)</th>
+                                <th>Clics</th>
+                                <th>Leads</th>
+                                <th>Tasa de Conv. (%)</th>
                                 <th>Costo por Lead (CPL)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr style="background-color: rgba(255, 243, 224, 0.8);">
                                 <td>erp para pymes chile</td>
+                                <td>Google Ads</td>
+                                <td>$105,050</td>
+                                <td>195</td>
                                 <td>15</td>
                                 <td>7.7%</td>
                                 <td>$7,003</td>
                             </tr>
-                             <tr>
+                            <tr style="background-color: rgba(220, 237, 200, 0.9);">
                                 <td>netsuite chile</td>
+                                <td>Google Ads</td>
+                                <td>$147,700</td>
+                                <td>258</td>
                                 <td>12</td>
                                 <td>4.7%</td>
                                 <td>$12,308</td>
                             </tr>
-                            <tr>
+                             <tr style="background-color: rgba(220, 237, 200, 0.9);">
+                                <td>(Búsqueda Orgánica)</td>
+                                <td>SEO</td>
+                                <td>$0</td>
+                                <td>140</td>
+                                <td>10</td>
+                                <td>7.1%</td>
+                                <td>$0</td>
+                            </tr>
+                             <tr>
                                 <td>software erp</td>
+                                <td>Google Ads</td>
+                                <td>$84,250</td>
+                                <td>151</td>
                                 <td>5</td>
                                 <td>3.3%</td>
                                 <td>$16,850</td>
                             </tr>
                             <tr>
                                 <td>consultoria erp</td>
+                                <td>Google Ads</td>
+                                <td>$70,100</td>
+                                <td>120</td>
                                 <td>3</td>
                                 <td>2.5%</td>
                                 <td>$23,367</td>
                             </tr>
-                             <tr>
-                                <td>(Tráfico Orgánico)</td>
-                                <td>10</td>
-                                <td>7.1%</td>
-                                <td>$0</td>
+                            <tr style="background-color: rgba(255, 235, 238, 0.9);">
+                                <td>oracle netsuite</td>
+                                <td>Google Ads</td>
+                                <td>$57,500</td>
+                                <td>98</td>
+                                <td>0</td>
+                                <td>0.0%</td>
+                                <td>N/A</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Section 3: Website Performance (Google Analytics) -->
             <div class="card full-width">
-                 <h2 class="card-title">Análisis del Tráfico Web (Google Analytics)</h2>
+                 <h2 class="card-title">Análisis de Contenido y Rendimiento de Páginas Web</h2>
             </div>
-            <div class="card half-width">
-                <h3 class="card-title">Canales de Adquisición de Usuarios</h3>
-                <div class="chart-container">
-                    <canvas id="trafficSourceChart"></canvas>
+             <div class="card half-width">
+                <h3 class="card-title">Páginas con Mayor Tráfico</h3>
+                 <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Título de Página / Artículo</th>
+                                <th>Vistas</th>
+                                <th>Usuarios</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                             <tr>
+                                <td>2Win Chile Oracle NetSuite... (Home)</td>
+                                <td>1,700</td>
+                                <td>714</td>
+                            </tr>
+                            <tr>
+                                <td>2WIN - El más poderoso ERP Cloud</td>
+                                <td>531</td>
+                                <td>479</td>
+                            </tr>
+                            <tr>
+                                <td>Optimiza tu gestión de inventario y ventas</td>
+                                <td>103</td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td>Fullstep: Software de Gestión de Compras</td>
+                                <td>99</td>
+                                <td>51</td>
+                            </tr>
+                            <tr>
+                                <td>El más poderoso ERP Cloud-2WIN (Variante)</td>
+                                <td>82</td>
+                                <td>47</td>
+                            </tr>
+                            <tr>
+                                <td>2Trade 2WIN Chile Oracle NetSuite</td>
+                                <td>72</td>
+                                <td>31</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="card half-width">
-                 <h3 class="card-title">Usuarios Nuevos vs. Recurrentes</h3>
-                <div class="chart-container">
-                    <canvas id="newVsReturningChart"></canvas>
-                </div>
+                <h3 class="card-title">Distribución de Vistas por Página</h3>
+                 <div class="chart-container">
+                    <canvas id="pageViewsChart"></canvas>
+                 </div>
             </div>
-            
 
-            <!-- Section 4: SEO & Organic Performance Deep Dive -->
             <div class="card full-width">
-                 <h2 class="card-title">Análisis Profundo de SEO y Rendimiento Orgánico</h2>
+                 <h2 class="card-title">Análisis Profundo de SEO y Competencia</h2>
             </div>
             <div class="card full-width">
                 <h3 class="card-title">Evolución de Visibilidad SEO (vs Competidor Principal)</h3>
@@ -297,117 +381,94 @@
                     <canvas id="seoVisibilityEvolutionChart"></canvas>
                 </div>
             </div>
-            <div class="card half-width">
-                 <h3 class="card-title">Comparativa de Visibilidad vs. Competencia</h3>
-                <div class="chart-container">
-                    <canvas id="seoCompetitorChart"></canvas>
-                </div>
-            </div>
-             <div class="card half-width">
-                <h3 class="card-title">Distribución de Rankings (Top 100)</h3>
-                <div class="chart-container">
-                    <canvas id="seoRankingChart"></canvas>
-                </div>
+             <div class="card full-width">
+                <h3 class="card-title">Panorama Competitivo SEO</h3>
+                 <div class="table-container">
+                     <table>
+                        <thead>
+                            <tr>
+                                <th>Competidor</th>
+                                <th>Visibilidad SEO (%)</th>
+                                <th>Posición Media</th>
+                                <th>Palabras Clave (Top 100)</th>
+                                <th>Análisis Estratégico</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background-color: rgba(255, 235, 238, 0.5);">
+                                <td>comparasoftware.cl</td>
+                                <td>32.04%</td>
+                                <td>23.2</td>
+                                <td>210</td>
+                                <td><strong>Principal Amenaza.</strong> Líder del mercado, nos duplica en visibilidad por su gran volumen de contenido.</td>
+                            </tr>
+                            <tr style="background-color: rgba(220, 237, 200, 0.5);">
+                                <td><strong>2win.cl (Nosotros)</strong></td>
+                                <td><strong>16.63%</strong></td>
+                                <td><strong>39.8</strong></td>
+                                <td><strong>7</strong></td>
+                                <td><strong>Crecimiento Exponencial.</strong> Nuestra estrategia es de calidad sobre cantidad, con pocas keywords pero muy bien posicionadas.</td>
+                            </tr>
+                            <tr style="background-color: rgba(220, 237, 200, 0.5);">
+                                <td>netsuite.com</td>
+                                <td>12.81%</td>
+                                <td>18.5</td>
+                                <td>15</td>
+                                <td><strong>Victoria Clave.</strong> Hemos superado en visibilidad al sitio oficial de Netsuite, una victoria estratégica importante.</td>
+                            </tr>
+                             <tr>
+                                <td>defontana.com</td>
+                                <td>5.0%</td>
+                                <td>45.1</td>
+                                <td>55</td>
+                                <td>Competidor indirecto, relevante pero no es una amenaza directa en nuestro nicho principal.</td>
+                            </tr>
+                             <tr>
+                                <td>kame.cl</td>
+                                <td>4.5%</td>
+                                <td>51.3</td>
+                                <td>30</td>
+                                <td>Competidor de nicho con menor impacto, actualmente no representa una amenaza.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                 </div>
             </div>
            
-            <!-- Section 5: LinkedIn Performance Deep Dive -->
-             <div class="card full-width">
-                 <h2 class="card-title">Análisis Profundo de Rendimiento en LinkedIn</h2>
+            <div class="card full-width">
+                 <h2 class="card-title">Análisis de Audiencia en LinkedIn</h2>
             </div>
-            <div class="card third-width">
+             <div class="card third-width">
                 <h3 class="card-title">Crecimiento de Suscriptores (Newsletter)</h3>
                 <div class="chart-container">
                     <canvas id="linkedinSubsChart"></canvas>
                 </div>
             </div>
             <div class="card third-width">
-                <h3 class="card-title">Top 5 Funciones Laborales (Visitantes)</h3>
+                <h3 class="card-title">Top Funciones Laborales (Visitantes)</h3>
                 <div class="chart-container">
                     <canvas id="linkedinJobChart"></canvas>
                 </div>
             </div>
             <div class="card third-width">
-                <h3 class="card-title">Top 5 Sectores (Visitantes)</h3>
+                <h3 class="card-title">Top Sectores (Visitantes)</h3>
                 <div class="chart-container">
                     <canvas id="linkedinIndustryChart"></canvas>
                 </div>
             </div>
 
         </div>
+        
+        <footer>
+            Reporte creado por Dan Tagle el 28 de junio del 2025 para 2WIN.cl - Reporte 100% confidencial
+        </footer>
     </div>
 
     <script>
         Chart.register(ChartDataLabels);
         Chart.defaults.plugins.datalabels.display = false;
         
-        // --- FUNNEL CHART (NOW VERTICAL LOGARITHMIC BAR) ---
-        const funnelCtx = document.getElementById('funnelChart').getContext('2d');
-        new Chart(funnelCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Impresiones (Ads)', 'Clics (Ads)', 'Usuarios Web (Todos)', 'Leads (Web)'],
-                datasets: [{
-                    label: 'Volumen',
-                    data: [55345, 1121, 1500, 45],
-                    backgroundColor: [
-                        'rgba(26, 35, 126, 0.7)',
-                        'rgba(13, 71, 161, 0.7)',
-                        'rgba(66, 165, 245, 0.7)',
-                        'rgba(25, 118, 210, 0.8)'
-                    ],
-                    borderColor: [
-                        'rgba(26, 35, 126, 1)',
-                        'rgba(13, 71, 161, 1)',
-                        'rgba(66, 165, 245, 1)',
-                        'rgba(25, 118, 210, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: 'Embudo de Marketing y Generación de Leads',
-                        font: { size: 16 },
-                        padding: { top: 10, bottom: 20 }
-                    },
-                    tooltip: {
-                        enabled: true,
-                         callbacks: {
-                            label: function(context) {
-                                return ' ' + context.dataset.label + ': ' + context.formattedValue;
-                            }
-                        }
-                    },
-                    datalabels: {
-                        display: true,
-                        anchor: 'end',
-                        align: 'top',
-                        color: '#333',
-                        font: {
-                            size: 14,
-                            weight: 'bold'
-                        },
-                        formatter: (value) => value.toLocaleString('es-CL')
-                    }
-                },
-                scales: {
-                    y: {
-                        type: 'logarithmic',
-                        title: {
-                            display: true,
-                            text: 'Cantidad (Escala Logarítmica)'
-                        }
-                    }
-                }
-            }
-        });
-
-        // --- LEAD SOURCE CHART ---
+        // --- LEAD GENERATION CHARTS ---
         const leadSourceCtx = document.getElementById('leadSourceChart').getContext('2d');
         new Chart(leadSourceCtx, {
             type: 'doughnut',
@@ -419,95 +480,67 @@
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 plugins: {
                     legend: { position: 'bottom' },
-                     title: {
-                        display: true,
-                        text: 'Origen de los 45 Leads',
-                        font: { size: 16 }
-                    },
+                     title: { display: true, text: 'Origen de los 45 Leads', font: { size: 16 } },
                     datalabels: {
-                        display: true,
-                        color: 'white',
-                        font: { weight: 'bold'},
+                        display: true, color: 'white', font: { weight: 'bold'},
                         formatter: (value, ctx) => {
-                            let sum = 0;
-                            let dataArr = ctx.chart.data.datasets[0].data;
-                            dataArr.map(data => { sum += data; });
-                            let percentage = (value*100 / sum).toFixed(1)+"%";
-                            return percentage;
+                            let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                            return (value*100 / sum).toFixed(0)+"%";
                         },
                     }
                 }
             }
         });
 
-
-        // --- TRAFFIC SOURCE CHART ---
-        const trafficSourceCtx = document.getElementById('trafficSourceChart').getContext('2d');
-        new Chart(trafficSourceCtx, {
-            type: 'pie',
-            data: {
-                labels: ['Búsqueda de Pago (Ads)', 'Tráfico Directo', 'Búsqueda Orgánica', 'Referidos y Otros'],
-                datasets: [{
-                    data: [1100, 232, 140, 28],
-                    backgroundColor: ['#1a237e', '#42a5f5', '#26c6da', '#90caf9'],
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'bottom' },
-                    datalabels: {
-                        display: true,
-                        color: 'white',
-                        font: { weight: 'bold'},
-                        formatter: (value, ctx) => {
-                            let sum = 0;
-                            let dataArr = ctx.chart.data.datasets[0].data;
-                            dataArr.map(data => { sum += data; });
-                            let percentage = (value*100 / sum).toFixed(1)+"%";
-                            return percentage;
-                        },
-                    }
-                }
-            }
-        });
-        
-        // --- NEW VS RETURNING CHART ---
-        const newVsReturningCtx = document.getElementById('newVsReturningChart').getContext('2d');
-        new Chart(newVsReturningCtx, {
+        const dailyLeadsCtx = document.getElementById('dailyLeadsChart').getContext('2d');
+        new Chart(dailyLeadsCtx, {
             type: 'line',
             data: {
-                labels: ["Jun 1", "Jun 8", "Jun 15", "Jun 22", "Jun 28"],
-                datasets: [
-                    {
-                        label: 'Usuarios Nuevos',
-                        data: [250, 300, 450, 700, 400],
-                        borderColor: '#1e88e5',
-                        backgroundColor: 'rgba(30, 136, 229, 0.1)',
-                        fill: true,
-                    },
-                    {
-                        label: 'Usuarios Recurrentes',
-                        data: [20, 30, 25, 45, 35],
-                        borderColor: '#7e57c2',
-                        fill: false,
-                    }
-                ]
+                labels: ["Jun 1-5", "Jun 6-10", "Jun 11-15", "Jun 16-20", "Jun 21-25", "Jun 26-28"],
+                datasets: [{
+                    label: 'Leads por Día',
+                    data: [5, 8, 12, 10, 7, 3],
+                    borderColor: 'var(--success-color)',
+                    backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
+        });
+
+        // --- CONTENT ANALYSIS CHART ---
+        const pageViewsCtx = document.getElementById('pageViewsChart').getContext('2d');
+        new Chart(pageViewsCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Home', 'ERP Cloud', 'Otras Páginas'],
+                datasets: [{
+                    data: [1700, 531, 356],
+                     backgroundColor: ['#1a237e', '#42a5f5', '#90caf9'],
+                }]
             },
              options: {
-                responsive: true, maintainAspectRatio: false,
-                scales: {
-                    y: { beginAtZero: true }
-                },
-                plugins: { legend: { position: 'bottom' } }
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                     title: { display: true, text: 'Distribución del Foco de Atención', font: { size: 16 } },
+                    datalabels: {
+                        display: true, color: 'white', font: { weight: 'bold'},
+                        formatter: (value, ctx) => {
+                            let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                            return (value*100 / sum).toFixed(0)+"%";
+                        },
+                    }
+                }
             }
         });
-        
+
+
         // --- SEO VISIBILITY EVOLUTION CHART ---
         const seoVisibilityCtx = document.getElementById('seoVisibilityEvolutionChart').getContext('2d');
         new Chart(seoVisibilityCtx, {
@@ -538,36 +571,6 @@
             }
         });
 
-        // --- SEO COMPETITOR CHART ---
-        const seoCompetitorCtx = document.getElementById('seoCompetitorChart').getContext('2d');
-        new Chart(seoCompetitorCtx, {
-            type: 'bar',
-            data: {
-                labels: ["comparasoftware.cl", "2win.cl", "netsuite.com", "defontana.com", "kame.cl"],
-                datasets: [{
-                    label: "Visibilidad (%)",
-                    data: [32.04, 16.63, 12.81, 5.0, 4.5],
-                    backgroundColor: ["#d32f2f", "#1976d2", "#388e3c", "#fbc02d", "#7b1fa2"],
-                }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false}} }
-        });
-
-        // --- SEO RANKING CHART ---
-        const seoRankingCtx = document.getElementById('seoRankingChart').getContext('2d');
-        new Chart(seoRankingCtx, {
-            type: 'pie',
-            data: {
-                labels: ["Top 3", "Top 4-10", "Top 11-100"],
-                datasets: [{
-                    label: "Cantidad de Palabras Clave",
-                    data: [2, 3, 2],
-                    backgroundColor: ["#388e3c", "#fbc02d", "#1e88e5"]
-                }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' }} }
-        });
-
         // --- LINKEDIN CHARTS ---
         const linkedinSubsCtx = document.getElementById('linkedinSubsChart').getContext('2d');
         new Chart(linkedinSubsCtx, {
@@ -576,7 +579,7 @@
                 labels: ["Sem 1", "Sem 2", "Sem 3", "Sem 4"],
                 datasets: [{
                     label: 'Nuevos Suscriptores',
-                    data: [80, 150, 120, 83],
+                    data: [80, 150, 120, 174],
                     borderColor: '#0e76a8',
                     backgroundColor: 'rgba(14, 118, 168, 0.2)',
                     fill: true,
@@ -612,7 +615,6 @@
             },
             options: { responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false}}, indexAxis: 'y' }
         });
-
     </script>
 </body>
 </html>
