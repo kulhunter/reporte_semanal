@@ -177,12 +177,16 @@
             <h1>Reporte Ejecutivo de Rendimiento Digital</h1>
             <p>Análisis Integral para 2win.cl | Período: 29 de Mayo - 28 de Junio, 2025</p>
         </header>
-<a href="https://ibb.co/5W88bR66"><img src="https://i.ibb.co/7JWWs1XX/Captura-de-pantalla-2025-06-28-a-la-s-1-15-38-p-m.png" alt="Captura-de-pantalla-2025-06-28-a-la-s-1-15-38-p-m" border="0"></a>
+
         <div class="dashboard-grid">
 
             <div class="card full-width">
                 <h2 class="card-title">Resumen de Indicadores Clave (KPIs)</h2>
                 <div class="kpi-grid">
+                     <div class="kpi-card">
+                        <p class="kpi-value" style="color: var(--success-color);">26.11%</p>
+                        <p class="kpi-label"><span class="tooltip">Visibilidad SEO<span class="tooltiptext">Métrica que representa qué tan visible es tu sitio en los resultados de búsqueda para tus palabras clave, comparado con tus competidores.</span></span></p>
+                    </div>
                     <div class="kpi-card">
                         <p class="kpi-value">45</p>
                         <p class="kpi-label">Leads Generados (Web)</p>
@@ -195,12 +199,14 @@
                         <p class="kpi-value" style="color: var(--success-color);">4.01%</p>
                         <p class="kpi-label"><span class="tooltip">Tasa de Conv. (Ads)<span class="tooltiptext">Porcentaje de clics de anuncios que resultaron en un lead.</span></span></p>
                     </div>
-                    <div class="kpi-card">
-                        <p class="kpi-value">16.63%</p>
-                        <p class="kpi-label"><span class="tooltip">Visibilidad SEO<span class="tooltiptext">Métrica que representa qué tan visible es tu sitio en los resultados de búsqueda para tus palabras clave, comparado con tus competidores.</span></span></p>
-                    </div>
                 </div>
             </div>
+             <div class="card full-width">
+                 <h3 class="card-title" style="text-align: center;">El Activo Digital: Evolución de Visibilidad Orgánica (SEO)</h3>
+                 <div class="chart-container" style="height: 450px;">
+                    <canvas id="mainSeoEvolutionChart"></canvas>
+                </div>
+             </div>
             
              <div class="card full-width insights">
                 <h3 class="card-title">Análisis Estratégico y Plan de Acción</h3>
@@ -208,6 +214,7 @@
                     <div>
                         <h4>Diagnóstico Estratégico</h4>
                         <ul>
+                            <li><strong>Éxito Orgánico Validado:</strong> El dato más revelador es el salto de la visibilidad SEO a <strong>26.11%</strong> justo después de apagar la inversión en Ads. Esto prueba que hemos construido un activo digital robusto que genera tráfico y posicionamiento por sí mismo.</li>
                             <li><strong>Motor de Leads:</strong> Google Ads es el principal generador de leads (78%), validando la inversión. El CPL general es de $18,514 CLP.</li>
                             <li><strong>Activo a Futuro:</strong> El crecimiento explosivo de la visibilidad SEO ya aporta el 22% de los leads a costo $0, demostrando un enorme potencial de rentabilidad.</li>
                             <li><strong>Dilema Calidad vs. Costo:</strong> La campaña "ERP para pymes" es la más económica en CPL ($7k) pero puede atraer leads no cualificados. "Netsuite Chile" tiene un CPL mayor ($12k) pero con una intención de compra superior.</li>
@@ -375,12 +382,6 @@
             <div class="card full-width">
                  <h2 class="card-title">Análisis Profundo de SEO y Competencia</h2>
             </div>
-            <div class="card full-width">
-                <h3 class="card-title">Evolución de Visibilidad SEO (vs Competidor Principal)</h3>
-                <div class="chart-container" style="height: 400px;">
-                    <canvas id="seoVisibilityEvolutionChart"></canvas>
-                </div>
-            </div>
              <div class="card full-width">
                 <h3 class="card-title">Panorama Competitivo SEO</h3>
                  <div class="table-container">
@@ -404,7 +405,7 @@
                             </tr>
                             <tr style="background-color: rgba(220, 237, 200, 0.5);">
                                 <td><strong>2win.cl (Nosotros)</strong></td>
-                                <td><strong>16.63%</strong></td>
+                                <td><strong>26.11%</strong></td>
                                 <td><strong>39.8</strong></td>
                                 <td><strong>7</strong></td>
                                 <td><strong>Crecimiento Exponencial.</strong> Nuestra estrategia es de calidad sobre cantidad, con pocas keywords pero muy bien posicionadas.</td>
@@ -467,6 +468,37 @@
     <script>
         Chart.register(ChartDataLabels);
         Chart.defaults.plugins.datalabels.display = false;
+
+        // --- MAIN SEO EVOLUTION CHART ---
+        const mainSeoCtx = document.getElementById('mainSeoEvolutionChart').getContext('2d');
+        new Chart(mainSeoCtx, {
+            type: 'line',
+            data: {
+                labels: ["Jun 6", "Jun 9", "Jun 12", "Jun 14", "Jun 19", "Jun 22", "Jun 26", "Jun 27", "Jun 28 (Ads OFF)"],
+                datasets: [{
+                    label: 'Visibilidad SEO (%)',
+                    data: [0.00, 0.00, 8.52, 8.68, 10.22, 10.66, 13.02, 15.22, 26.11],
+                    borderColor: 'var(--primary-color)',
+                    backgroundColor: 'rgba(26, 35, 126, 0.2)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointBackgroundColor: 'var(--primary-color)'
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true, title: { display: true, text: 'Visibilidad (%)' } } },
+                plugins: { 
+                    legend: { display: false },
+                    tooltip: { 
+                        callbacks: { 
+                            label: (c) => `Visibilidad: ${c.formattedValue}%` 
+                        } 
+                    } 
+                }
+            }
+        });
         
         // --- LEAD GENERATION CHARTS ---
         const leadSourceCtx = document.getElementById('leadSourceChart').getContext('2d');
@@ -537,37 +569,6 @@
                         },
                     }
                 }
-            }
-        });
-
-
-        // --- SEO VISIBILITY EVOLUTION CHART ---
-        const seoVisibilityCtx = document.getElementById('seoVisibilityEvolutionChart').getContext('2d');
-        new Chart(seoVisibilityCtx, {
-            type: 'line',
-            data: {
-                labels: ["Jun 1", "Jun 8", "Jun 15", "Jun 22", "Jun 28"],
-                datasets: [{
-                    label: 'Visibilidad 2win.cl (%)',
-                    data: [1.13, 4.5, 11.2, 17.8, 16.63],
-                    borderColor: '#1a237e',
-                    backgroundColor: 'rgba(26, 35, 126, 0.2)',
-                    fill: true,
-                    tension: 0.4
-                },
-                {
-                    label: 'Visibilidad comparasoftware.cl (%)',
-                    data: [30, 31, 31.5, 32.2, 32.04],
-                    borderColor: '#d32f2f',
-                    fill: false,
-                    tension: 0.4,
-                    borderDash: [5, 5]
-                }]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                scales: { y: { beginAtZero: true, title: { display: true, text: 'Visibilidad (%)' } } },
-                plugins: { tooltip: { callbacks: { label: (c) => `${c.dataset.label}: ${c.formattedValue}%` } } }
             }
         });
 
