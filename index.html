@@ -196,12 +196,18 @@
             </div>
             
             <div class="card full-width insights">
-                <h3 class="card-title">Conclusiones para el CEO</h3>
+                <h3 class="card-title">Análisis Estratégico y Próximos Pasos</h3>
                 <ul>
-                    <li><strong>Foco en Leads:</strong> El principal generador de leads identificables en este período ha sido el <strong>Newsletter de LinkedIn, con 433 nuevos suscriptores</strong>. Esto representa un canal de marketing directo de altísimo valor con un público profesional y relevante.</li>
-                    <li><strong>Inversión que Atrae:</strong> La inversión en Google Ads es el motor principal de tráfico al sitio web, <strong>atrayendo al 73% de todos los usuarios</strong>. Cada usuario adquirido por esta vía tuvo un costo aproximado de $578 CLP.</li>
-                    <li><strong>El SEO es el Gran Ganador:</strong> La estrategia SEO ha tenido un <strong>crecimiento explosivo (+1,370%) en visibilidad</strong> este mes. Pasamos de ser casi invisibles a tener una presencia competitiva sólida. Este es un activo a largo plazo que reducirá la dependencia de la publicidad pagada.</li>
-                    <li><strong>Próximo Paso:</strong> La estrategia debe enfocarse en dos frentes: <strong>1)</strong> Mantener la inversión en Ads para seguir captando volumen y <strong>2)</strong> Potenciar agresivamente el SEO y la captura de leads en el sitio web (formularios, descargas) para capitalizar el tráfico orgánico creciente y mejorar el ROI general.</li>
+                    <li><strong>El Despegue del SEO: Nuestro Activo Digital a Largo Plazo:</strong> El logro más significativo de este período es el crecimiento exponencial de la visibilidad orgánica, que se disparó desde un <strong>1.13% hasta un peak de casi un 18%</strong> (un aumento superior al 1,300%). Esto nos ha posicionado como un competidor relevante en las búsquedas clave y representa la construcción de un activo digital sostenible que disminuirá nuestra dependencia futura de la publicidad pagada.</li>
+                    <li><strong>Google Ads: El Motor de Tráfico Inmediato y Escalable:</strong> La inversión publicitaria sigue siendo nuestra principal herramienta para generar volumen de tráfico, siendo responsable del <strong>73% de todos los usuarios</strong> que llegan al sitio web. Cada visita tuvo un costo eficiente, pero el verdadero valor reside en que nos permite capturar demanda existente de usuarios que buscan activamente soluciones como "Netsuite Chile" y "ERP para pymes".</li>
+                    <li><strong>LinkedIn: La Máquina de Generación de Leads Cualificados:</strong> Mientras Ads y SEO llenan la parte alta del embudo, LinkedIn ha demostrado ser excepcionalmente eficaz en la conversión. La captación de <strong>433 suscriptores</strong> para nuestro newsletter nos entrega una base de datos de leads con cargos y en sectores de alto interés estratégico (Ventas, Operaciones, Consultoría TI), listos para ser nutridos.</li>
+                    <li><strong>Plan de Acción - Hacia la Conversión Total:</strong>
+                        <ul style="margin-top: 10px;">
+                            <li><strong>Capitalizar el Tráfico (Prioridad #1):</strong> La oportunidad más grande es convertir el tráfico web en leads. Debemos implementar de forma agresiva <strong>llamados a la acción (CTAs) claros</strong> en nuestras páginas más visitadas (Home, ERP Cloud), ofreciendo demos, descargables (whitepapers) o consultas directas para no depender únicamente de los leads de LinkedIn.</li>
+                            <li><strong>Doblar la Apuesta en SEO:</strong> Crear más contenido de valor en torno a las temáticas ganadoras (Retail, 2trade, Fullstep) y optimizar las páginas de destino para las palabras clave que ya nos traen tráfico cualificado.</li>
+                            <li><strong>Optimizar la Inversión en Ads:</strong> Si bien el costo es eficiente, podemos mejorarlo. Debemos enfocar la optimización en mejorar el CTR de las palabras clave con muchas impresiones y refinar las landing pages para aumentar la interacción y, eventualmente, la conversión a lead.</li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
 
@@ -378,14 +384,14 @@
         Chart.register(ChartDataLabels);
         Chart.defaults.plugins.datalabels.display = false;
         
-        // --- FUNNEL CHART ---
+        // --- FUNNEL CHART (NOW VERTICAL LOGARITHMIC BAR) ---
         const funnelCtx = document.getElementById('funnelChart').getContext('2d');
         new Chart(funnelCtx, {
             type: 'bar',
             data: {
                 labels: ['Impresiones (Ads)', 'Clics (Ads)', 'Usuarios Web (Todos)', 'Leads (LinkedIn Subs)'],
                 datasets: [{
-                    label: 'Embudo de Conversión',
+                    label: 'Volumen',
                     data: [55345, 1121, 1500, 433],
                     backgroundColor: [
                         'rgba(26, 35, 126, 0.7)',
@@ -393,34 +399,52 @@
                         'rgba(66, 165, 245, 0.7)',
                         'rgba(25, 118, 210, 0.8)'
                     ],
+                    borderColor: [
+                        'rgba(26, 35, 126, 1)',
+                        'rgba(13, 71, 161, 1)',
+                        'rgba(66, 165, 245, 1)',
+                        'rgba(25, 118, 210, 1)'
+                    ],
                     borderWidth: 1
                 }]
             },
             options: {
-                indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
                     legend: { display: false },
-                    tooltip: { enabled: false },
+                    title: {
+                        display: true,
+                        text: 'Embudo de Marketing y Generación de Leads',
+                        font: { size: 16 },
+                        padding: { top: 10, bottom: 20 }
+                    },
+                    tooltip: {
+                        enabled: true,
+                         callbacks: {
+                            label: function(context) {
+                                return ' ' + context.dataset.label + ': ' + context.formattedValue;
+                            }
+                        }
+                    },
                     datalabels: {
                         display: true,
-                        color: 'white',
+                        anchor: 'end',
+                        align: 'top',
+                        color: '#333',
                         font: {
-                            size: 16,
+                            size: 14,
                             weight: 'bold'
                         },
                         formatter: (value) => value.toLocaleString('es-CL')
                     }
                 },
                 scales: {
-                    x: {
-                        display: false,
-                        max: 60000
-                    },
                     y: {
-                        grid: {
-                            display: false
+                        type: 'logarithmic',
+                        title: {
+                            display: true,
+                            text: 'Cantidad (Escala Logarítmica)'
                         }
                     }
                 }
@@ -446,6 +470,7 @@
                     datalabels: {
                         display: true,
                         color: 'white',
+                        font: { weight: 'bold'},
                         formatter: (value, ctx) => {
                             let sum = 0;
                             let dataArr = ctx.chart.data.datasets[0].data;
