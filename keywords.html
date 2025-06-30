@@ -75,10 +75,9 @@
             border-bottom: 2px solid #e0e0e0;
             padding-bottom: 10px;
         }
-        /* --- ESTILO CORREGIDO PARA EL GRÁFICO --- */
         .chart-container {
             position: relative;
-            height: 450px; /* Altura fija para el contenedor */
+            height: 450px;
             width: 100%;
         }
         .grid-kpi {
@@ -158,6 +157,49 @@
             font-size: 0.9em;
             color: #777;
         }
+        
+        /* --- ESTILOS PARA LAS DEFINICIONES (TOOLTIPS) --- */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted #0d47a1;
+            cursor: help;
+            text-decoration: none;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 280px;
+            background-color: #333;
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 10px 15px;
+            position: absolute;
+            z-index: 10;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -140px; /* Mitad del ancho para centrar */
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 0.95em;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
         @media (max-width: 768px) {
             .grid-2-col { grid-template-columns: 1fr; }
             header h1 { font-size: 2em; }
@@ -165,7 +207,7 @@
     </style>
 </head>
 <body>
-
+    
     <nav class="main-nav">
         <a href="https://kulhunter.github.io/reporte_semanal/" class="nav-button" target="_blank">Ir a Reporte General de Resultados</a>
     </nav>
@@ -179,8 +221,8 @@
         <div class="card">
             <h2>Resumen Ejecutivo del Mes</h2>
             <div class="analysis-text">
-                <p>Junio de 2025 ha sido un mes de <strong>crecimiento excepcional y consolidación de la autoridad</strong> para 2win.cl. La visibilidad orgánica, medida por Semrush, experimentó un <strong>incremento drástico de más del 600%</strong>, pasando de un modesto 1.13% a un sólido 8.35%. Este avance fue impulsado principalmente por el posicionamiento exitoso de palabras clave comerciales de alto volumen como "erp chile" y "oracle netsuite", que emergieron desde posiciones fuera del top 100 hasta alcanzar el top 40.</p>
-                <p>El tráfico estimado y la posición promedio, según los datos de Wincher, reflejan esta misma historia de éxito. Aunque la competencia en el nicho de software ERP en Chile es intensa, 2win.cl logró escalar posiciones significativamente, superando a varios competidores en visibilidad. El desafío para el próximo mes será defender estas nuevas posiciones y capitalizar el tráfico creciente para la generación de leads.</p>
+                <p>Junio de 2025 ha sido un mes de <strong>crecimiento excepcional y consolidación de la autoridad</strong> para 2win.cl. La <span class="tooltip">visibilidad orgánica<span class="tooltiptext">Métrica que representa el porcentaje de todos los clics posibles que recibe un sitio desde Google para las palabras clave rastreadas. Un % más alto significa mayor presencia en los resultados de búsqueda.</span></span>, medida por Semrush, experimentó un <strong>incremento drástico de más del 600%</strong>, pasando de un modesto 1.13% a un sólido 8.35%. Este avance fue impulsado principalmente por el posicionamiento exitoso de <span class="tooltip">palabras clave comerciales<span class="tooltiptext">Términos de búsqueda que indican una alta intención de compra por parte del usuario. Por ejemplo, 'comprar erp' o 'software para finanzas'.</span></span> de alto volumen como "erp chile" y "oracle netsuite", que emergieron desde posiciones fuera del top 100 hasta alcanzar el top 40.</p>
+                <p>El <span class="tooltip">tráfico estimado<span class="tooltiptext">Una aproximación del número de visitas que una palabra clave podría generar, basada en su volumen de búsqueda y tu posición en el ranking. No son las visitas reales medidas por Analytics, sino una estimación de potencial.</span></span> y la <span class="tooltip">posición promedio<span class="tooltiptext">El ranking o puesto medio de todas tus palabras clave rastreadas. Un número más bajo es mejor, ya que indica que, en promedio, estás más cerca de la primera posición en Google.</span></span>, según los datos de Wincher, reflejan esta misma historia de éxito. Aunque la competencia en el nicho de software ERP en Chile es intensa, 2win.cl logró escalar posiciones significativamente, superando a varios competidores en visibilidad. El desafío para el próximo mes será defender estas nuevas posiciones y capitalizar el tráfico creciente para la generación de leads.</p>
             </div>
         </div>
         
@@ -188,22 +230,22 @@
             <h2>Indicadores Clave de Rendimiento (KPIs)</h2>
             <div class="grid-kpi">
                 <div class="kpi">
-                    <p class="kpi-title">Visibilidad Semrush</p>
+                    <p class="kpi-title"><span class="tooltip">Visibilidad Semrush<span class="tooltiptext">Porcentaje de clics que se estima que el sitio recibe desde Google para las palabras clave rastreadas, basado en las posiciones obtenidas.</span></span></p>
                     <p class="kpi-metric">8.35%</p>
                     <p class="kpi-change positive">▲ +7.22 pts vs. inicio de mes</p>
                 </div>
                 <div class="kpi">
-                    <p class="kpi-title">Posición Promedio Wincher</p>
+                    <p class="kpi-title"><span class="tooltip">Posición Promedio<span class="tooltiptext">El ranking o puesto promedio de todas tus palabras clave. Un número más bajo es mejor (más cerca del #1).</span></span></p>
                     <p class="kpi-metric">38.8</p>
                     <p class="kpi-change positive">▲ 26.2 puestos mejor</p>
                 </div>
                 <div class="kpi">
-                    <p class="kpi-title">Keywords en Top 3</p>
+                    <p class="kpi-title"><span class="tooltip">Keywords en Top 3<span class="tooltiptext">Cantidad de palabras clave para las cuales tu sitio aparece entre los primeros 3 resultados de Google, la zona de mayor visibilidad y clics.</span></span></p>
                     <p class="kpi-metric">1</p>
                     <p class="kpi-change positive">▲ +1 vs. inicio de mes</p>
                 </div>
                 <div class="kpi">
-                    <p class="kpi-title">Keywords en Top 10</p>
+                    <p class="kpi-title"><span class="tooltip">Keywords en Top 10<span class="tooltiptext">Cantidad de palabras clave para las cuales tu sitio aparece en la primera página de Google. Esencial para recibir tráfico orgánico.</span></span></p>
                     <p class="kpi-metric">5</p>
                     <p class="kpi-change positive">▲ +4 vs. inicio de mes</p>
                 </div>
@@ -216,20 +258,20 @@
                 <canvas id="visibilityChart"></canvas>
             </div>
             <div class="analysis-text">
-                <p>El gráfico ilustra claramente la trayectoria del mes. La visibilidad se mantuvo estable y baja durante las primeras dos semanas. El punto de inflexión ocurrió a partir del 18 de junio, con un crecimiento constante que alcanzó su <strong>pico máximo de 16.63% el 28 de junio</strong>. Este pico se correlaciona directamente con la mejora en el ranking de palabras clave de alto volumen. El ligero ajuste a la baja al final del mes es normal y refleja la volatilidad de las SERPs, estabilizándose en una nueva base mucho más alta que al principio.</p>
+                <p>El gráfico ilustra claramente la trayectoria del mes. La visibilidad se mantuvo estable y baja durante las primeras dos semanas. El punto de inflexión ocurrió a partir del 18 de junio, con un crecimiento constante que alcanzó su <strong>pico máximo de 16.63% el 28 de junio</strong>. Este pico se correlaciona directamente con la mejora en el ranking de palabras clave de alto volumen. El ligero ajuste a la baja al final del mes es normal y refleja la volatilidad de las <span class="tooltip">SERPs<span class="tooltiptext">Página de Resultados del Motor de Búsqueda (del inglés Search Engine Results Page). Es la página que Google te muestra después de que realizas una búsqueda.</span></span>, estabilizándose en una nueva base mucho más alta que al principio.</p>
             </div>
         </div>
 
         <div class="card">
             <h2>Análisis Profundo de Palabras Clave</h2>
             
-            <h3>Palabras Clave de Marca</h3>
+            <h3><span class="tooltip">Palabras Clave de Marca<span class="tooltiptext">Términos de búsqueda que incluyen el nombre de tu empresa o una variación del mismo, como '2win' o '2win chile'.</span></span></h3>
             <p>El rendimiento de la palabra clave de marca se mantuvo estable, garantizando la primera posición, lo cual es fundamental.</p>
             <table>
                 <thead>
                     <tr>
                         <th>Palabra Clave</th>
-                        <th>Volumen</th>
+                        <th><span class="tooltip">Volumen<span class="tooltiptext">El número promedio de veces que los usuarios buscan una palabra clave específica cada mes en un país determinado.</span></span></th>
                         <th>Posición Inicial</th>
                         <th>Posición Final</th>
                         <th>Cambio</th>
@@ -252,11 +294,11 @@
                 <thead>
                     <tr>
                         <th>Palabra Clave</th>
-                        <th>Volumen</th>
+                        <th><span class="tooltip">Volumen<span class="tooltiptext">El número promedio de veces que los usuarios buscan una palabra clave específica cada mes. Un volumen alto indica mayor interés.</span></span></th>
                         <th>Posición Inicial</th>
                         <th>Posición Final</th>
                         <th>Cambio</th>
-                        <th>Tráfico Estimado (Final)</th>
+                        <th><span class="tooltip">Tráfico Estimado (Final)<span class="tooltiptext">Una aproximación del número de visitas mensuales que esta palabra clave podría generar en su posición final.</span></span></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -402,7 +444,7 @@
              <table>
                 <thead>
                     <tr>
-                        <th>Página de Destino (URL)</th>
+                        <th><span class="tooltip">Página de Destino (URL)<span class="tooltiptext">La URL específica de tu sitio web a la que llega un usuario después de hacer clic en un resultado de búsqueda.</span></span></th>
                         <th>Tráfico Estimado</th>
                         <th>Principal Palabra Clave</th>
                     </tr>
@@ -467,7 +509,7 @@
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false, // Clave para que el contenedor controle la altura
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         beginAtZero: true,
