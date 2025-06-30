@@ -89,20 +89,13 @@
         <h1>Acceso Concedido</h1>
         <p>Selecciona el reporte que deseas ver.</p>
         
-        <a href="resumen.html">
-            Ver Resumen Semanal
-        </a>
-        <a href="kpi.html">
-            Ver Evolución de KPIs
-        </a>
-        <a href="keywords.html">
-            Ver Resumen de Keywords
-        </a>
+        <a href="resumen.html">Ver Resumen Semanal</a>
+        <a href="kpi.html">Ver Evolución de KPIs</a>
+        <a href="keywords.html">Ver Resumen de Keywords</a>
     </div>
 
     <script>
         const CLAVE_CORRECTA = 'LaCapitania80';
-
         const loginContainer = document.getElementById('login-container');
         const contenidoProtegido = document.getElementById('contenido-protegido');
         const passwordInput = document.getElementById('password-input');
@@ -116,3 +109,15 @@
                 alert('Clave incorrecta. Inténtalo de nuevo.');
                 passwordInput.value = '';
             }
+        }
+        submitBtn.addEventListener('click', verificarClave);
+        passwordInput.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                verificarClave();
+            }
+        });
+    </script>
+
+</body>
+</html>
