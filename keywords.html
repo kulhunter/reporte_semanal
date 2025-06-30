@@ -17,7 +17,6 @@
             padding: 24px;
             font-size: 16px;
         }
-        /* --- NUEVO ESTILO PARA EL BOTÓN DE NAVEGACIÓN --- */
         .main-nav {
             width: 100%;
             text-align: center;
@@ -26,7 +25,7 @@
         .nav-button {
             display: inline-block;
             padding: 12px 25px;
-            background-color: #0d47a1; /* Color primario del reporte */
+            background-color: #0d47a1;
             color: #ffffff;
             font-size: 1.1em;
             font-weight: 600;
@@ -36,10 +35,9 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.15);
         }
         .nav-button:hover {
-            background-color: #1a237e; /* Un tono más oscuro */
+            background-color: #1a237e;
             transform: translateY(-2px);
         }
-        /* --- FIN DE NUEVOS ESTILOS --- */
         .container {
             max-width: 1300px;
             margin: auto;
@@ -76,6 +74,12 @@
             color: #0d47a1;
             border-bottom: 2px solid #e0e0e0;
             padding-bottom: 10px;
+        }
+        /* --- ESTILO CORREGIDO PARA EL GRÁFICO --- */
+        .chart-container {
+            position: relative;
+            height: 450px; /* Altura fija para el contenedor */
+            width: 100%;
         }
         .grid-kpi {
             display: grid;
@@ -161,10 +165,11 @@
     </style>
 </head>
 <body>
-    
+
     <nav class="main-nav">
         <a href="https://kulhunter.github.io/reporte_semanal/" class="nav-button" target="_blank">Ir a Reporte General de Resultados</a>
     </nav>
+
     <div class="container">
         <header>
             <h1>Reporte de Rendimiento SEO</h1>
@@ -207,7 +212,9 @@
 
         <div class="card">
             <h2>Evolución de Visibilidad Orgánica (Semrush %)</h2>
-            <canvas id="visibilityChart" style="min-height: 400px;"></canvas>
+            <div class="chart-container">
+                <canvas id="visibilityChart"></canvas>
+            </div>
             <div class="analysis-text">
                 <p>El gráfico ilustra claramente la trayectoria del mes. La visibilidad se mantuvo estable y baja durante las primeras dos semanas. El punto de inflexión ocurrió a partir del 18 de junio, con un crecimiento constante que alcanzó su <strong>pico máximo de 16.63% el 28 de junio</strong>. Este pico se correlaciona directamente con la mejora en el ranking de palabras clave de alto volumen. El ligero ajuste a la baja al final del mes es normal y refleja la volatilidad de las SERPs, estabilizándose en una nueva base mucho más alta que al principio.</p>
             </div>
@@ -460,7 +467,7 @@
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: false, // Clave para que el contenedor controle la altura
                 scales: {
                     y: {
                         beginAtZero: true,
