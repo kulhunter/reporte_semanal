@@ -53,6 +53,19 @@
             max-width: 500px;
             border-radius: 0.75rem;
         }
+        .chart-container {
+            transition: opacity 0.5s, max-height 0.5s;
+            max-height: 200px;
+            opacity: 1;
+        }
+        .chart-container.hidden {
+            max-height: 0;
+            opacity: 0;
+            padding-top: 0;
+            margin-top: 0;
+            border-top: 0;
+            overflow: hidden;
+        }
         /* Critical Error Modal */
         .error-modal-overlay {
             position: fixed;
@@ -81,9 +94,16 @@
 
     <div class="max-w-7xl mx-auto">
         <header class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">Dashboard de KPIs</h1>
-            <p class="text-gray-500 mt-1">Seguimiento de resultados de Junio a Diciembre.</p>
-            <p class="text-xs text-gray-400 mt-2">ID de Usuario: <span id="userId">Cargando...</span></p>
+            <div class="flex justify-between items-start">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800">Dashboard de KPIs</h1>
+                    <p class="text-gray-500 mt-1">Metas del 2º Semestre (Jul-Dic) con seguimiento desde Junio.</p>
+                    <p class="text-xs text-gray-400 mt-2">ID de Usuario: <span id="userId">Cargando...</span></p>
+                </div>
+                <button id="toggle-charts-btn" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg shadow-sm transition">
+                    Ocultar Evolución
+                </button>
+            </div>
         </header>
 
         <!-- Input Form Card -->
@@ -113,14 +133,14 @@
         <div class="modal-content">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-semibold text-gray-800" id="modal-title">Ingresar Datos</h3>
-                <button id="close-modal" class="text-gray-500 hover:text-gray-800">&times;</button>
+                <button id="close-modal" class="text-gray-500 hover:text-gray-800 text-3xl font-bold">&times;</button>
             </div>
             <form id="kpi-form">
                 <div id="modal-form-inputs" class="space-y-4">
                     <!-- Form inputs are generated here -->
                 </div>
                 <div class="mt-6 flex justify-end">
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition duration-300">Guardar Cambios</button>
+                    <button id="save-data-btn" type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 w-32 text-center">Guardar</button>
                 </div>
             </form>
         </div>
@@ -138,7 +158,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- CONFIGURACIÓN ---
         const firebaseConfig = {
@@ -159,7 +179,7 @@
 
         let userId = null;
         let weeklyData = {};
-        let chartInstances = {}; // To keep track of charts
+        let chartInstances = {};
 
         const kpis = [
             { id: 'leads', name: 'Leads', weeklyGoal: 2.5, totalGoal: 60, format: 'float' },
@@ -223,7 +243,6 @@
         }
 
         function getDateRangeOfWeek(weekNo) {
-            // Base date: May 27, 2024 is the start of week 22 (which contains June 1st).
             const baseDate = new Date('2024-05-27T00:00:00');
             const weekOffset = weekNo - 22;
             const startDate = new Date(baseDate);
@@ -237,7 +256,6 @@
         function populateWeekSelector() {
             const select = document.getElementById('week-select');
             select.innerHTML = '';
-            // Weeks for June to December 2024 are roughly 22 to 52
             for (let i = 22; i <= 52; i++) {
                 const option = document.createElement('option');
                 option.value = i;
@@ -250,15 +268,20 @@
             const grid = document.getElementById('kpi-grid');
             grid.innerHTML = '';
 
-            // Destroy old charts before re-rendering
             Object.values(chartInstances).forEach(chart => chart.destroy());
             chartInstances = {};
             
-            const totalAccumulated = kpis.map(kpi => Object.values(weeklyData).reduce((sum, week) => sum + (Number(week[kpi.id]) || 0), 0));
-            
             kpis.forEach((kpi, index) => {
-                const accumulated = totalAccumulated[index];
-                const totalProgress = kpi.totalGoal > 0 ? (accumulated / kpi.totalGoal) * 100 : 0;
+                // Calculate total accumulated from June onwards (week 22)
+                const totalAccumulated = Object.values(weeklyData)
+                    .reduce((sum, week) => sum + (Number(week[kpi.id]) || 0), 0);
+
+                // Calculate accumulated for goal from July onwards (week 27)
+                const goalAccumulated = Object.values(weeklyData)
+                    .filter(week => week.week >= 27)
+                    .reduce((sum, week) => sum + (Number(week[kpi.id]) || 0), 0);
+                
+                const totalProgress = kpi.totalGoal > 0 ? (goalAccumulated / kpi.totalGoal) * 100 : 0;
                 
                 const card = document.createElement('div');
                 card.className = 'card';
@@ -267,15 +290,15 @@
                         <h3 class="font-semibold text-lg text-gray-800">${kpi.name}</h3>
                         <p class="text-gray-500 text-sm mb-4">Meta Semanal: ${kpi.weeklyGoal.toLocaleString('es-ES')}</p>
                         <div class="text-center my-4">
-                            <p class="text-3xl font-bold text-indigo-600">${accumulated.toLocaleString('es-ES')}</p>
-                            <p class="text-gray-500">de ${kpi.totalGoal.toLocaleString('es-ES')} (Total)</p>
+                            <p class="text-3xl font-bold text-indigo-600">${totalAccumulated.toLocaleString('es-ES')}</p>
+                            <p class="text-gray-500">de ${kpi.totalGoal.toLocaleString('es-ES')} (Meta Jul-Dic)</p>
                         </div>
                         <div class="w-full progress-bar-bg h-4">
                             <div class="progress-bar h-4" style="width: ${Math.min(totalProgress, 100)}%;"></div>
                         </div>
                         <p class="text-right text-sm mt-2 font-medium">${totalProgress.toFixed(1)}%</p>
                     </div>
-                    <div class="mt-4 pt-4 border-t border-gray-200 flex-grow">
+                    <div class="chart-container mt-4 pt-4 border-t border-gray-200 flex-grow">
                         <div class="h-24 relative">
                             <canvas id="chart-${kpi.id}"></canvas>
                         </div>
@@ -284,22 +307,17 @@
                 grid.appendChild(card);
             });
 
-            // Create charts after cards are in the DOM
             kpis.forEach(kpi => {
                 const ctx = document.getElementById(`chart-${kpi.id}`).getContext('2d');
-                
                 const labels = [];
-                // Weeks for June to December 2024 are roughly 22 to 52
                 for (let i = 22; i <= 52; i++) {
                     labels.push(`S${i}`);
                 }
-
                 const chartData = labels.map(label => {
                     const weekNum = label.substring(1);
                     const weekKey = `week_${weekNum}`;
                     return weeklyData[weekKey]?.[kpi.id] || 0;
                 });
-
                 chartInstances[kpi.id] = new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -316,49 +334,44 @@
                         }]
                     },
                     options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
+                        responsive: true, maintainAspectRatio: false,
                         scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: { display: false },
-                                grid: { display: false },
-                                border: { display: false }
-                            },
-                            x: {
-                                ticks: { display: false },
-                                grid: { display: false },
-                                border: { display: false }
-                            }
+                            y: { beginAtZero: true, ticks: { display: false }, grid: { display: false }, border: { display: false } },
+                            x: { ticks: { display: false }, grid: { display: false }, border: { display: false } }
                         },
                         plugins: {
-                            legend: {
-                                display: false
-                            },
+                            legend: { display: false },
                             tooltip: {
-                                mode: 'index',
-                                intersect: false,
-                                callbacks: {
-                                    title: function(context) {
-                                        const weekNum = context[0].label.substring(1);
-                                        return `Semana ${weekNum}`;
-                                    }
-                                }
+                                mode: 'index', intersect: false,
+                                callbacks: { title: (context) => `Semana ${context[0].label.substring(1)}` }
                             }
                         }
                     }
                 });
             });
+            // Apply chart visibility state
+            const chartsVisible = document.getElementById('toggle-charts-btn').textContent.includes('Ocultar');
+            document.querySelectorAll('.chart-container').forEach(c => c.classList.toggle('hidden', !chartsVisible));
         }
         
-        // --- MANEJO DEL MODAL ---
+        // --- MANEJO DE EVENTOS ---
         const modal = document.getElementById('data-entry-modal');
         const closeModalBtn = document.getElementById('close-modal');
         const loadWeekDataBtn = document.getElementById('load-week-data');
         const kpiForm = document.getElementById('kpi-form');
+        const toggleChartsBtn = document.getElementById('toggle-charts-btn');
 
         closeModalBtn.onclick = () => { modal.style.display = "none"; };
         window.onclick = (event) => { if (event.target == modal) modal.style.display = "none"; };
+
+        toggleChartsBtn.addEventListener('click', () => {
+            const charts = document.querySelectorAll('.chart-container');
+            const isHidden = charts[0]?.classList.contains('hidden');
+            charts.forEach(chart => {
+                chart.classList.toggle('hidden', !isHidden);
+            });
+            toggleChartsBtn.textContent = isHidden ? 'Ocultar Evolución' : 'Ver Evolución';
+        });
 
         loadWeekDataBtn.addEventListener('click', () => {
             if (!userId) {
@@ -383,6 +396,11 @@
         kpiForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!userId) { alert("No se pueden guardar los datos. Hay un problema de conexión con la base de datos."); return; }
+            
+            const saveBtn = document.getElementById('save-data-btn');
+            saveBtn.textContent = 'Guardando...';
+            saveBtn.disabled = true;
+
             const weekSelect = document.getElementById('week-select');
             const selectedWeek = weekSelect.value;
             const docId = `week_${selectedWeek}`;
@@ -390,12 +408,26 @@
             const formData = new FormData(kpiForm);
             const dataToSave = { week: parseInt(selectedWeek) };
             for(let [key, value] of formData.entries()) dataToSave[key] = parseFloat(value) || 0;
+            
             try {
                 await setDoc(doc(db, collectionPath, docId), dataToSave);
-                modal.style.display = "none";
+                saveBtn.textContent = '¡Guardado!';
+                saveBtn.classList.add('bg-green-500', 'hover:bg-green-600');
+                saveBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+
+                setTimeout(() => {
+                    modal.style.display = "none";
+                    saveBtn.textContent = 'Guardar';
+                    saveBtn.disabled = false;
+                    saveBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                    saveBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+                }, 1500);
+
             } catch (error) {
                 console.error("Error saving document: ", error);
                 alert("Hubo un error al guardar los datos.");
+                saveBtn.textContent = 'Guardar';
+                saveBtn.disabled = false;
             }
         });
 
