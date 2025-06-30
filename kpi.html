@@ -82,7 +82,7 @@
     <div class="max-w-7xl mx-auto">
         <header class="mb-8">
             <h1 class="text-3xl font-bold text-gray-800">Dashboard de KPIs</h1>
-            <p class="text-gray-500 mt-1">Seguimiento de resultados de Julio a Diciembre.</p>
+            <p class="text-gray-500 mt-1">Seguimiento de resultados de Junio a Diciembre.</p>
             <p class="text-xs text-gray-400 mt-2">ID de Usuario: <span id="userId">Cargando...</span></p>
         </header>
 
@@ -223,8 +223,9 @@
         }
 
         function getDateRangeOfWeek(weekNo) {
-            const baseDate = new Date('2024-07-01T00:00:00');
-            const weekOffset = weekNo - 27;
+            // Base date: May 27, 2024 is the start of week 22 (which contains June 1st).
+            const baseDate = new Date('2024-05-27T00:00:00');
+            const weekOffset = weekNo - 22;
             const startDate = new Date(baseDate);
             startDate.setDate(baseDate.getDate() + weekOffset * 7);
             const endDate = new Date(startDate);
@@ -236,7 +237,8 @@
         function populateWeekSelector() {
             const select = document.getElementById('week-select');
             select.innerHTML = '';
-            for (let i = 27; i <= 52; i++) {
+            // Weeks for June to December 2024 are roughly 22 to 52
+            for (let i = 22; i <= 52; i++) {
                 const option = document.createElement('option');
                 option.value = i;
                 option.textContent = `Semana ${i} ${getDateRangeOfWeek(i)}`;
@@ -287,7 +289,8 @@
                 const ctx = document.getElementById(`chart-${kpi.id}`).getContext('2d');
                 
                 const labels = [];
-                for (let i = 27; i <= 52; i++) {
+                // Weeks for June to December 2024 are roughly 22 to 52
+                for (let i = 22; i <= 52; i++) {
                     labels.push(`S${i}`);
                 }
 
