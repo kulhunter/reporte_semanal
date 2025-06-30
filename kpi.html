@@ -51,30 +51,27 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
                 <label for="week-select" class="block text-sm font-medium text-gray-700 mb-1">Seleccionar Semana</label>
-                <select id="week-select" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                    </select>
+                <select id="week-select" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></select>
             </div>
             <div class="md:col-span-2 self-end">
-                <button id="load-week-data" class="w-full md:w-auto bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition duration-300">Cargar / Ingresar Datos</button>
+                <button id="load-week-data" class="w-full md:w-auto bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition">Cargar / Ingresar Datos</button>
             </div>
         </div>
     </div>
 
-    <div id="kpi-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        </div>
+    <div id="kpi-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 </div>
 
 <div id="data-entry-modal" class="modal">
     <div class="modal-content">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-semibold text-gray-800" id="modal-title">Ingresar Datos</h3>
+            <h3 class="text-xl font-semibold text-gray-800" id="modal-title"></h3>
             <button id="close-modal" class="text-gray-500 hover:text-gray-800 text-3xl font-bold">&times;</button>
         </div>
         <form id="kpi-form">
-            <div id="modal-form-inputs" class="space-y-4">
-                </div>
+            <div id="modal-form-inputs" class="space-y-4"></div>
             <div class="mt-6 flex justify-end">
-                <button id="save-data-btn" type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 w-32 text-center">Guardar</button>
+                <button id="save-data-btn" type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md w-32 text-center">Guardar</button>
             </div>
         </form>
     </div>
@@ -88,12 +85,10 @@
 </div>
     
 <script type="module">
-    // --- IMPORTS ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, doc, setDoc, onSnapshot, collection, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    // --- CONFIGURACIÓN Y ESTADO GLOBAL ---
     const firebaseConfig = {
       apiKey: "AIzaSyABENFsser5DBLIm1pIM0dBQUVq5Jc5RMc",
       authDomain: "reporte-2win.firebaseapp.com",
@@ -105,7 +100,6 @@
     };
     
     const appId = "reporte-2win-dashboard";
-
     const kpis = [
         { id: 'leads', name: 'Leads', weeklyGoal: 2.5, totalGoal: 60, format: 'float' },
         { id: 'visitas', name: 'Visitas Mensuales', weeklyGoal: 250, totalGoal: 6000, format: 'integer' },
@@ -115,7 +109,7 @@
         { id: 'comentarios', name: 'Comentarios LinkedIn', weeklyGoal: 18.4, totalGoal: 50, format: 'float' }
     ];
 
-    let userId = null; // Útil para saber QUIÉN puede editar
+    let userId = null;
     let weeklyData = {}; 
     let chartInstances = {}; 
     
@@ -123,7 +117,6 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // --- AUTENTICACIÓN Y CARGA DE DATOS ---
     function initializeAuth() {
         onAuthStateChanged(auth, user => {
             if (user) {
@@ -137,9 +130,7 @@
     }
 
     function listenForDataChanges() {
-        // La ruta ahora es fija y pública, ya no incluye {userId}
         const collectionPath = `kpi_dashboard/${appId}/shared_kpis`; 
-        
         console.log("👂 Escuchando cambios en la colección PÚBLICA:", collectionPath);
         const q = query(collection(db, collectionPath));
         
@@ -153,55 +144,26 @@
             renderDashboard();
         }, (error) => {
             console.error("❌ Error al escuchar los datos:", error);
-            showCriticalError("No se pudieron cargar los datos. Revisa las reglas de seguridad de tu base de datos en Firebase.");
+            showCriticalError("No se pudieron cargar los datos. Revisa las reglas de seguridad de tu base de datos en Firebase y los dominios autorizados de tu API Key.");
         });
     }
 
-    // --- LÓGICA DE LA INTERFAZ (UI) ---
     function renderDashboard() {
         console.log("🎨 Pintando el dashboard con los datos actuales:", weeklyData);
         const grid = document.getElementById('kpi-grid');
         const chartsVisible = document.getElementById('toggle-charts-btn').textContent.includes('Ocultar');
         grid.innerHTML = '';
-
         Object.values(chartInstances).forEach(chart => chart.destroy());
         chartInstances = {};
-        
-        if (Object.keys(weeklyData).length === 0) {
-            console.warn("⚠️ No hay datos para mostrar. El dashboard aparecerá vacío. Ingresa datos para una semana.");
-        }
-
+        if (Object.keys(weeklyData).length === 0) { console.warn("⚠️ No hay datos para mostrar. El dashboard aparecerá vacío. Ingresa datos para una semana."); }
         kpis.forEach((kpi) => {
-            const goalAccumulated = Object.values(weeklyData)
-                .filter(week => week.week >= 27)
-                .reduce((sum, week) => sum + (Number(week[kpi.id]) || 0), 0);
-            
+            const goalAccumulated = Object.values(weeklyData).filter(week => week.week >= 27).reduce((sum, week) => sum + (Number(week[kpi.id]) || 0), 0);
             const totalProgress = kpi.totalGoal > 0 ? (goalAccumulated / kpi.totalGoal) * 100 : 0;
-            
             const card = document.createElement('div');
             card.className = 'card';
-            card.innerHTML = `
-                <div>
-                    <h3 class="font-semibold text-lg text-gray-800">${kpi.name}</h3>
-                    <p class="text-gray-500 text-sm mb-4">Meta Semanal: ${kpi.weeklyGoal.toLocaleString('es-ES')}</p>
-                    <div class="text-center my-4">
-                        <p class="text-3xl font-bold text-indigo-600">${goalAccumulated.toLocaleString('es-ES')}</p>
-                        <p class="text-gray-500">de ${kpi.totalGoal.toLocaleString('es-ES')} (Meta Jul-Dic)</p>
-                    </div>
-                    <div class="w-full progress-bar-bg h-4">
-                        <div class="progress-bar h-4" style="width: ${Math.min(totalProgress, 100)}%;"></div>
-                    </div>
-                    <p class="text-right text-sm mt-2 font-medium">${totalProgress.toFixed(1)}%</p>
-                </div>
-                <div class="chart-container mt-4 pt-4 border-t border-gray-200 flex-grow ${chartsVisible ? '' : 'hidden'}">
-                    <div class="h-24 relative">
-                        <canvas id="chart-${kpi.id}"></canvas>
-                    </div>
-                </div>
-            `;
+            card.innerHTML = `<div><h3 class="font-semibold text-lg text-gray-800">${kpi.name}</h3><p class="text-gray-500 text-sm mb-4">Meta Semanal: ${kpi.weeklyGoal.toLocaleString('es-ES')}</p><div class="text-center my-4"><p class="text-3xl font-bold text-indigo-600">${goalAccumulated.toLocaleString('es-ES')}</p><p class="text-gray-500">de ${kpi.totalGoal.toLocaleString('es-ES')} (Meta Jul-Dic)</p></div><div class="w-full progress-bar-bg h-4"><div class="progress-bar h-4" style="width: ${Math.min(totalProgress, 100)}%;"></div></div><p class="text-right text-sm mt-2 font-medium">${totalProgress.toFixed(1)}%</p></div><div class="chart-container mt-4 pt-4 border-t border-gray-200 flex-grow ${chartsVisible ? '' : 'hidden'}"><div class="h-24 relative"><canvas id="chart-${kpi.id}"></canvas></div></div>`;
             grid.appendChild(card);
         });
-
         kpis.forEach(kpi => {
             const canvas = document.getElementById(`chart-${kpi.id}`);
             if (!canvas) return;
@@ -213,34 +175,8 @@
                 return weeklyData[weekKey]?.[kpi.id] || 0;
             });
             chartInstances[kpi.id] = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: kpi.name,
-                        data: chartData,
-                        borderColor: 'rgba(79, 70, 229, 0.8)',
-                        backgroundColor: 'rgba(199, 210, 254, 0.3)',
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 1,
-                        pointBackgroundColor: 'rgba(79, 70, 229, 0.8)'
-                    }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    scales: {
-                        y: { beginAtZero: true, ticks: { display: false }, grid: { display: false }, border: { display: false } },
-                        x: { ticks: { display: false }, grid: { display: false }, border: { display: false } }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            mode: 'index', intersect: false,
-                            callbacks: { title: (context) => `Semana ${context[0].label.substring(1)}` }
-                        }
-                    }
-                }
+                type: 'line', data: { labels: labels, datasets: [{ label: kpi.name, data: chartData, borderColor: 'rgba(79, 70, 229, 0.8)', backgroundColor: 'rgba(199, 210, 254, 0.3)', fill: true, tension: 0.4, pointRadius: 1, pointBackgroundColor: 'rgba(79, 70, 229, 0.8)' }] },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { display: false }, grid: { display: false }, border: { display: false } }, x: { ticks: { display: false }, grid: { display: false }, border: { display: false } } }, plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false, callbacks: { title: (context) => `Semana ${context[0].label.substring(1)}` } } } }
             });
         });
     }
@@ -259,20 +195,7 @@
     function handleAuthError(error) {
         console.error("❌ Anonymous sign-in failed:", error);
         document.getElementById('connection-status').textContent = "Error de conexión";
-        if (error.code === 'auth/configuration-not-found') {
-            showCriticalError(
-                `<p class="mb-4">La aplicación no puede conectar a la base de datos porque el <strong>inicio de sesión anónimo no está habilitado</strong> en tu proyecto de Firebase.</p>
-                 <p class="mb-2"><strong>Solución:</strong></p>
-                 <ol class="list-decimal list-inside text-left mx-auto max-w-md">
-                     <li class="mb-2">Ve a tu <a href="https://console.firebase.google.com/project/${firebaseConfig.projectId}/authentication/providers" target="_blank" class="text-blue-600 hover:underline font-semibold">Consola de Firebase</a>.</li>
-                     <li class="mb-2">En la sección <strong>Authentication</strong>, ve a la pestaña <strong>Sign-in method</strong>.</li>
-                     <li class="mb-2">Busca <strong>Anónimo</strong> en la lista, haz clic, activa el interruptor y guarda.</li>
-                     <li class="mb-2">Recarga esta página.</li>
-                 </ol>`
-            );
-        } else {
-            showCriticalError("Ocurrió un error de autenticación inesperado. Revisa la consola para más detalles.");
-        }
+        if (error.code === 'auth/configuration-not-found') { showCriticalError(`<p class="mb-4">El <strong>inicio de sesión anónimo no está habilitado</strong> en Firebase.</p><p class="mb-2"><strong>Solución:</strong></p><ol class="list-decimal list-inside text-left"><li>Ve a tu <a href="https://console.firebase.google.com/project/${firebaseConfig.projectId}/authentication/providers" target="_blank" class="text-blue-600 hover:underline">Consola de Firebase</a> > Authentication > Sign-in method.</li><li>Busca y activa <strong>Anónimo</strong> y guarda.</li><li>Recarga esta página.</li></ol>`); } else { showCriticalError("Error de autenticación inesperado."); }
     }
 
     function showCriticalError(htmlMessage) {
@@ -280,7 +203,6 @@
         document.getElementById('critical-error-modal').style.display = 'flex';
     }
 
-    // --- MANEJO DE EVENTOS ---
     const modal = document.getElementById('data-entry-modal');
     document.getElementById('close-modal').onclick = () => { modal.style.display = "none"; };
     window.onclick = (event) => { if (event.target == modal) modal.style.display = "none"; };
@@ -328,7 +250,6 @@
             saveBtn.textContent = '¡Guardado!';
             saveBtn.classList.add('bg-green-500', 'hover:bg-green-600');
             saveBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
-
             setTimeout(() => {
                 modal.style.display = "none";
                 saveBtn.textContent = 'Guardar';
@@ -344,7 +265,6 @@
         }
     });
 
-    // --- INICIALIZACIÓN DE LA PÁGINA ---
     window.addEventListener('DOMContentLoaded', () => {
         console.log("🚀 Página cargada. Iniciando aplicación en modo PÚBLICO...");
         populateWeekSelector();
