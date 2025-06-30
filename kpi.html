@@ -148,6 +148,28 @@
         });
     }
 
+    function getDateRangeOfWeek(weekNo) {
+        const baseDate = new Date('2024-05-27T00:00:00');
+        const weekOffset = weekNo - 22;
+        const startDate = new Date(baseDate);
+        startDate.setDate(baseDate.getDate() + weekOffset * 7);
+        const endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + 6);
+        const format = (d) => `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`;
+        return `(${format(startDate)} - ${format(endDate)})`;
+    }
+
+    function populateWeekSelector() {
+        const select = document.getElementById('week-select');
+        select.innerHTML = '';
+        for (let i = 22; i <= 52; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = `Semana ${i} ${getDateRangeOfWeek(i)}`;
+            select.appendChild(option);
+        }
+    }
+    
     function renderDashboard() {
         console.log("🎨 Pintando el dashboard con los datos actuales:", weeklyData);
         const grid = document.getElementById('kpi-grid');
@@ -181,17 +203,6 @@
         });
     }
     
-    function populateWeekSelector() {
-        const select = document.getElementById('week-select');
-        select.innerHTML = '';
-        for (let i = 22; i <= 52; i++) {
-            const option = document.createElement('option');
-            option.value = i;
-            option.textContent = `Semana ${i}`;
-            select.appendChild(option);
-        }
-    }
-    
     function handleAuthError(error) {
         console.error("❌ Anonymous sign-in failed:", error);
         document.getElementById('connection-status').textContent = "Error de conexión";
@@ -217,7 +228,8 @@
     document.getElementById('load-week-data').addEventListener('click', () => {
         const weekSelect = document.getElementById('week-select');
         const selectedWeek = weekSelect.value;
-        document.getElementById('modal-title').textContent = `Ingresar Datos - Semana ${selectedWeek}`;
+        const selectedWeekText = weekSelect.options[weekSelect.selectedIndex].text;
+        document.getElementById('modal-title').textContent = `Ingresar Datos - ${selectedWeekText}`;
         const formInputs = document.getElementById('modal-form-inputs');
         formInputs.innerHTML = '';
         const currentWeekData = weeklyData[`week_${selectedWeek}`] || {};
