@@ -27,6 +27,29 @@
             margin: 0;
             padding: 20px;
         }
+        /* --- NUEVO ESTILO PARA EL BOTÓN DE NAVEGACIÓN --- */
+        .main-nav {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .nav-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            font-size: 1.1em;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+        .nav-button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        /* --- FIN DE NUEVOS ESTILOS --- */
         .container {
             max-width: 1800px;
             margin: auto;
@@ -171,7 +194,10 @@
     </style>
 </head>
 <body>
-
+    
+    <nav class="main-nav">
+        <a href="https://kulhunter.github.io/reporte_semanal/keywords.html" class="nav-button" target="_blank">Ver Análisis Detallado de Palabras Clave</a>
+    </nav>
     <div class="container">
         <header>
             <h1>Reporte Ejecutivo de Rendimiento Digital</h1>
@@ -255,7 +281,7 @@
                     </div>
                      <div class="chart-container" style="min-height: 300px">
                          <canvas id="deviceChart"></canvas>
-                     </div>
+                    </div>
                 </div>
                 <div class="insights" style="margin-top: 20px;">
                     <h4>Conclusiones y Recomendaciones (Google Ads)</h4>
@@ -277,7 +303,7 @@
                  <div class="card-title" style="margin-top: 30px; border: none; padding-bottom: 0;">Páginas con Mayor Rendimiento</div>
                  <div class="chart-container" style="min-height: 450px;">
                      <canvas id="webPerformanceChart"></canvas>
-                 </div>
+                </div>
                  <div class="insights" style="margin-top: 20px;">
                     <h4>Conclusiones y Recomendaciones (Web y Contenido)</h4>
                     <ul>
@@ -306,13 +332,13 @@
                                  <tr><td>kame.cl</td><td>4.5%</td></tr>
                             </tbody>
                         </table>
-                     </div>
+                    </div>
                      <div class="chart-container" style="min-height: 300px;">
                         <canvas id="seoRankingChart"></canvas>
-                     </div>
-                 </div>
-                  <div class="card-title" style="margin-top: 30px; border: none; padding-bottom: 0;">Rendimiento de Palabras Clave Orgánicas</div>
-                  <div class="table-container">
+                    </div>
+                </div>
+                 <div class="card-title" style="margin-top: 30px; border: none; padding-bottom: 0;">Rendimiento de Palabras Clave Orgánicas</div>
+                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
@@ -332,7 +358,7 @@
                              <tr><td>consultoria erp chile</td><td>#58</td><td><span style="color: var(--danger-color);">-1</span></td><td>/</td></tr>
                         </tbody>
                     </table>
-                  </div>
+                </div>
 
                  <div class="insights" style="margin-top: 20px;">
                     <h4>Conclusiones y Recomendaciones (SEO)</h4>
@@ -342,7 +368,7 @@
                     </ul>
                 </div>
             </div>
-           
+            
             <div class="card full-width">
                  <h2 class="card-title">Reporte de Resultados: LinkedIn</h2>
                  <div class="kpi-grid">
@@ -358,8 +384,8 @@
                     </div>
                      <div class="chart-container" style="min-height: 450px">
                         <canvas id="linkedinSeniorityChart"></canvas>
-                     </div>
-                 </div>
+                    </div>
+                </div>
                 <div class="insights" style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 20px;">
                      <div>
                         <h4>Conclusiones</h4>
