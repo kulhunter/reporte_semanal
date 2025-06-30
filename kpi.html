@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de KPIs Semanales</title>
+    <title>Evolución de KPIs</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -19,7 +19,7 @@
         .error-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.75); display: flex; justify-content: center; align-items: center; z-index: 200; }
         .error-modal-content { background-color: #fff; padding: 2rem; border-radius: 0.75rem; text-align: center; max-width: 90%; width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .report-header { background-color: #ffffff; padding: 12px 20px; text-align: center; margin-bottom: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; }
-        .report-header .nav-btn { color: #334155; background-color: #f1f5f9; text-decoration: none; padding: 10px 20px; margin: 0 8px; border-radius: 8px; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 1em; transition: all 0.2s ease-in-out; border: 2px solid transparent; }
+        .report-header .nav-btn { color: #334155; background-color: #f1f5f9; text-decoration: none; padding: 10px 20px; margin: 0 8px; border-radius: 8px; font-weight: 600; font-size: 1em; transition: all 0.2s ease-in-out; border: 2px solid transparent; }
         .report-header .nav-btn:hover { background-color: #e2e8f0; transform: translateY(-2px); }
         .report-header .nav-btn.active { background-color: #1a237e; color: #ffffff; cursor: default; box-shadow: 0 2px 8px rgba(26, 35, 126, 0.4); }
     </style>
@@ -27,9 +27,9 @@
 <body class="p-4 md:p-8">
 
 <header class="report-header">
-    <a href="https://kulhunter.github.io/reporte_semanal/" class="nav-btn">Resumen Semanal</a>
-    <a href="https://kulhunter.github.io/reporte_semanal/keywords.html" class="nav-btn">Resumen de Keywords</a>
-    <a href="https://kulhunter.github.io/reporte_semanal/kpi.html" class="nav-btn active">Evolución KPIs</a>
+    <a href="resumen.html" class="nav-btn">Resumen Semanal</a>
+    <a href="keywords.html" class="nav-btn">Resumen de Keywords</a>
+    <a href="kpi.html" class="nav-btn active">Evolución KPIs</a>
 </header>
 
 <div class="max-w-7xl mx-auto">
