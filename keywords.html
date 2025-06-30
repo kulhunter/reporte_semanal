@@ -17,26 +17,36 @@
             padding: 24px;
             font-size: 16px;
         }
-        .main-nav {
-            width: 100%;
+        .report-header {
+            background-color: #ffffff;
+            padding: 12px 20px;
             text-align: center;
             margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
         }
-        .nav-button {
-            display: inline-block;
-            padding: 12px 25px;
-            background-color: #0d47a1;
-            color: #ffffff;
-            font-size: 1.1em;
-            font-weight: 600;
+        .report-header .nav-btn {
+            color: #334155;
+            background-color: #f1f5f9;
             text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 8px;
             border-radius: 8px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            font-weight: 600;
+            font-size: 1em;
+            transition: all 0.2s ease-in-out;
+            border: 2px solid transparent;
         }
-        .nav-button:hover {
-            background-color: #1a237e;
+        .report-header .nav-btn:hover {
+            background-color: #e2e8f0;
             transform: translateY(-2px);
+        }
+        .report-header .nav-btn.active {
+            background-color: #1a237e;
+            color: #ffffff;
+            cursor: default;
+            box-shadow: 0 2px 8px rgba(26, 35, 126, 0.4);
         }
         .container {
             max-width: 1300px;
@@ -157,8 +167,6 @@
             font-size: 0.9em;
             color: #777;
         }
-        
-        /* --- ESTILOS PARA LAS DEFINICIONES (TOOLTIPS) --- */
         .tooltip {
             position: relative;
             display: inline-block;
@@ -178,7 +186,7 @@
             z-index: 10;
             bottom: 125%;
             left: 50%;
-            margin-left: -140px; /* Mitad del ancho para centrar */
+            margin-left: -140px;
             opacity: 0;
             transition: opacity 0.3s ease;
             font-size: 0.95em;
@@ -199,7 +207,6 @@
             visibility: visible;
             opacity: 1;
         }
-
         @media (max-width: 768px) {
             .grid-2-col { grid-template-columns: 1fr; }
             header h1 { font-size: 2em; }
@@ -207,406 +214,350 @@
     </style>
 </head>
 <body>
-    
-    <style>
-    /* Estilos para el contenedor del header */
-    .report-header {
-        background-color: #ffffff;
-        padding: 12px 20px;
-        text-align: center;
-        margin-bottom: 30px;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        border: 1px solid #e0e0e0;
-    }
-    /* Estilos para los botones de navegación */
-    .report-header .nav-btn {
-        color: #334155; /* Color de texto oscuro */
-        background-color: #f1f5f9; /* Fondo gris claro */
-        text-decoration: none;
-        padding: 10px 20px;
-        margin: 0 8px;
-        border-radius: 8px;
-        font-weight: 600;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 1em;
-        transition: all 0.2s ease-in-out;
-        border: 2px solid transparent;
-    }
-    /* Efecto al pasar el mouse por encima */
-    .report-header .nav-btn:hover {
-        background-color: #e2e8f0;
-        transform: translateY(-2px);
-    }
-    /* Estilo especial para el botón de la página ACTIVA */
-    .report-header .nav-btn.active {
-        background-color: #1a237e; /* Color primario oscuro */
-        color: #ffffff;
-        cursor: default;
-        box-shadow: 0 2px 8px rgba(26, 35, 126, 0.4);
-    }
-</style>
 
 <header class="report-header">
-    <a href="https://kulhunter.github.io/reporte_semanal/" class="nav-btn">Resumen Semanal</a>
-    <a href="https://kulhunter.github.io/reporte_semanal/keywords.html" class="nav-btn">Resumen de Keywords</a>
-    <a href="https://kulhunter.github.io/reporte_semanal/kpi.html" class="nav-btn">Evolución KPIs</a>
+    <a href="resumen.html" class="nav-btn">Resumen Semanal</a>
+    <a href="keywords.html" class="nav-btn active">Resumen de Keywords</a>
+    <a href="kpi.html" class="nav-btn">Evolución KPIs</a>
 </header>
 
-<script>
-    /* Este script encuentra en qué página estás y le aplica el estilo "active" al botón correspondiente */
-    document.addEventListener("DOMContentLoaded", function() {
-        const currentPagePath = window.location.pathname;
-        const navLinks = document.querySelectorAll('.report-header .nav-btn');
+<div class="container">
+    <header>
+        <h1>Reporte de Rendimiento SEO</h1>
+        <p><strong>Dominio:</strong> 2win.cl | <strong>Período:</strong> 1 al 30 de Junio, 2025</p>
+    </header>
 
-        navLinks.forEach(link => {
-            const linkPath = new URL(link.href).pathname;
-
-            // Compara las rutas para ver si coinciden
-            // La condición especial (currentPagePath.endsWith('/')) es para la página principal
-            if (currentPagePath === linkPath || (currentPagePath.endsWith('/') && linkPath.endsWith('/reporte_semanal/'))) {
-                link.classList.add('active');
-            }
-        });
-    });
-</script>
-    <div class="container">
-        <header>
-            <h1>Reporte de Rendimiento SEO</h1>
-            <p><strong>Dominio:</strong> 2win.cl | <strong>Período:</strong> 1 al 30 de Junio, 2025</p>
-        </header>
-
-        <div class="card">
-            <h2>Resumen Ejecutivo del Mes</h2>
-            <div class="analysis-text">
-                <p>Junio de 2025 ha sido un mes de <strong>crecimiento excepcional y consolidación de la autoridad</strong> para 2win.cl. La <span class="tooltip">visibilidad orgánica<span class="tooltiptext">Métrica que representa el porcentaje de todos los clics posibles que recibe un sitio desde Google para las palabras clave rastreadas. Un % más alto significa mayor presencia en los resultados de búsqueda.</span></span>, medida por Semrush, experimentó un <strong>incremento drástico de más del 600%</strong>, pasando de un modesto 1.13% a un sólido 8.35%. Este avance fue impulsado principalmente por el posicionamiento exitoso de <span class="tooltip">palabras clave comerciales<span class="tooltiptext">Términos de búsqueda que indican una alta intención de compra por parte del usuario. Por ejemplo, 'comprar erp' o 'software para finanzas'.</span></span> de alto volumen como "erp chile" y "oracle netsuite", que emergieron desde posiciones fuera del top 100 hasta alcanzar el top 40.</p>
-                <p>El <span class="tooltip">tráfico estimado<span class="tooltiptext">Una aproximación del número de visitas que una palabra clave podría generar, basada en su volumen de búsqueda y tu posición en el ranking. No son las visitas reales medidas por Analytics, sino una estimación de potencial.</span></span> y la <span class="tooltip">posición promedio<span class="tooltiptext">El ranking o puesto medio de todas tus palabras clave rastreadas. Un número más bajo es mejor, ya que indica que, en promedio, estás más cerca de la primera posición en Google.</span></span>, según los datos de Wincher, reflejan esta misma historia de éxito. Aunque la competencia en el nicho de software ERP en Chile es intensa, 2win.cl logró escalar posiciones significativamente, superando a varios competidores en visibilidad. El desafío para el próximo mes será defender estas nuevas posiciones y capitalizar el tráfico creciente para la generación de leads.</p>
+    <div class="card">
+        <h2>Resumen Ejecutivo del Mes</h2>
+        <div class="analysis-text">
+            <p>Junio de 2025 ha sido un mes de <strong>crecimiento excepcional y consolidación de la autoridad</strong> para 2win.cl. La <span class="tooltip">visibilidad orgánica<span class="tooltiptext">Métrica que representa el porcentaje de todos los clics posibles que recibe un sitio desde Google para las palabras clave rastreadas. Un % más alto significa mayor presencia en los resultados de búsqueda.</span></span>, medida por Semrush, experimentó un <strong>incremento drástico de más del 600%</strong>, pasando de un modesto 1.13% a un sólido 8.35%. Este avance fue impulsado principalmente por el posicionamiento exitoso de <span class="tooltip">palabras clave comerciales<span class="tooltiptext">Términos de búsqueda que indican una alta intención de compra por parte del usuario. Por ejemplo, 'comprar erp' o 'software para finanzas'.</span></span> de alto volumen como "erp chile" y "oracle netsuite", que emergieron desde posiciones fuera del top 100 hasta alcanzar el top 40.</p>
+            <p>El <span class="tooltip">tráfico estimado<span class="tooltiptext">Una aproximación del número de visitas que una palabra clave podría generar, basada en su volumen de búsqueda y tu posición en el ranking. No son las visitas reales medidas por Analytics, sino una estimación de potencial.</span></span> y la <span class="tooltip">posición promedio<span class="tooltiptext">El ranking o puesto medio de todas tus palabras clave rastreadas. Un número más bajo es mejor, ya que indica que, en promedio, estás más cerca de la primera posición en Google.</span></span>, según los datos de Wincher, reflejan esta misma historia de éxito. Aunque la competencia en el nicho de software ERP en Chile es intensa, 2win.cl logró escalar posiciones significativamente, superando a varios competidores en visibilidad. El desafío para el próximo mes será defender estas nuevas posiciones y capitalizar el tráfico creciente para la generación de leads.</p>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2>Indicadores Clave de Rendimiento (KPIs)</h2>
+        <div class="grid-kpi">
+            <div class="kpi">
+                <p class="kpi-title"><span class="tooltip">Visibilidad Semrush<span class="tooltiptext">Porcentaje de clics que se estima que el sitio recibe desde Google para las palabras clave rastreadas, basado en las posiciones obtenidas.</span></span></p>
+                <p class="kpi-metric">8.35%</p>
+                <p class="kpi-change positive">▲ +7.22 pts vs. inicio de mes</p>
+            </div>
+            <div class="kpi">
+                <p class="kpi-title"><span class="tooltip">Posición Promedio<span class="tooltiptext">El ranking o puesto promedio de todas tus palabras clave. Un número más bajo es mejor (más cerca del #1).</span></span></p>
+                <p class="kpi-metric">38.8</p>
+                <p class="kpi-change positive">▲ 26.2 puestos mejor</p>
+            </div>
+            <div class="kpi">
+                <p class="kpi-title"><span class="tooltip">Keywords en Top 3<span class="tooltiptext">Cantidad de palabras clave para las cuales tu sitio aparece entre los primeros 3 resultados de Google, la zona de mayor visibilidad y clics.</span></span></p>
+                <p class="kpi-metric">1</p>
+                <p class="kpi-change positive">▲ +1 vs. inicio de mes</p>
+            </div>
+            <div class="kpi">
+                <p class="kpi-title"><span class="tooltip">Keywords en Top 10<span class="tooltiptext">Cantidad de palabras clave para las cuales tu sitio aparece en la primera página de Google. Esencial para recibir tráfico orgánico.</span></span></p>
+                <p class="kpi-metric">5</p>
+                <p class="kpi-change positive">▲ +4 vs. inicio de mes</p>
             </div>
         </div>
-        
-        <div class="card">
-            <h2>Indicadores Clave de Rendimiento (KPIs)</h2>
-            <div class="grid-kpi">
-                <div class="kpi">
-                    <p class="kpi-title"><span class="tooltip">Visibilidad Semrush<span class="tooltiptext">Porcentaje de clics que se estima que el sitio recibe desde Google para las palabras clave rastreadas, basado en las posiciones obtenidas.</span></span></p>
-                    <p class="kpi-metric">8.35%</p>
-                    <p class="kpi-change positive">▲ +7.22 pts vs. inicio de mes</p>
-                </div>
-                <div class="kpi">
-                    <p class="kpi-title"><span class="tooltip">Posición Promedio<span class="tooltiptext">El ranking o puesto promedio de todas tus palabras clave. Un número más bajo es mejor (más cerca del #1).</span></span></p>
-                    <p class="kpi-metric">38.8</p>
-                    <p class="kpi-change positive">▲ 26.2 puestos mejor</p>
-                </div>
-                <div class="kpi">
-                    <p class="kpi-title"><span class="tooltip">Keywords en Top 3<span class="tooltiptext">Cantidad de palabras clave para las cuales tu sitio aparece entre los primeros 3 resultados de Google, la zona de mayor visibilidad y clics.</span></span></p>
-                    <p class="kpi-metric">1</p>
-                    <p class="kpi-change positive">▲ +1 vs. inicio de mes</p>
-                </div>
-                <div class="kpi">
-                    <p class="kpi-title"><span class="tooltip">Keywords en Top 10<span class="tooltiptext">Cantidad de palabras clave para las cuales tu sitio aparece en la primera página de Google. Esencial para recibir tráfico orgánico.</span></span></p>
-                    <p class="kpi-metric">5</p>
-                    <p class="kpi-change positive">▲ +4 vs. inicio de mes</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>Evolución de Visibilidad Orgánica (Semrush %)</h2>
-            <div class="chart-container">
-                <canvas id="visibilityChart"></canvas>
-            </div>
-            <div class="analysis-text">
-                <p>El gráfico ilustra claramente la trayectoria del mes. La visibilidad se mantuvo estable y baja durante las primeras dos semanas. El punto de inflexión ocurrió a partir del 18 de junio, con un crecimiento constante que alcanzó su <strong>pico máximo de 16.63% el 28 de junio</strong>. Este pico se correlaciona directamente con la mejora en el ranking de palabras clave de alto volumen. El ligero ajuste a la baja al final del mes es normal y refleja la volatilidad de las <span class="tooltip">SERPs<span class="tooltiptext">Página de Resultados del Motor de Búsqueda (del inglés Search Engine Results Page). Es la página que Google te muestra después de que realizas una búsqueda.</span></span>, estabilizándose en una nueva base mucho más alta que al principio.</p>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>Análisis Profundo de Palabras Clave</h2>
-            
-            <h3><span class="tooltip">Palabras Clave de Marca<span class="tooltiptext">Términos de búsqueda que incluyen el nombre de tu empresa o una variación del mismo, como '2win' o '2win chile'.</span></span></h3>
-            <p>El rendimiento de la palabra clave de marca se mantuvo estable, garantizando la primera posición, lo cual es fundamental.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Palabra Clave</th>
-                        <th><span class="tooltip">Volumen<span class="tooltiptext">El número promedio de veces que los usuarios buscan una palabra clave específica cada mes en un país determinado.</span></span></th>
-                        <th>Posición Inicial</th>
-                        <th>Posición Final</th>
-                        <th>Cambio</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>2win</td>
-                        <td>70</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td class="pos-neutral">― 0</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3 style="margin-top: 30px;">Palabras Clave Comerciales</h3>
-            <p>Aquí se observa el mayor impacto del mes. Keywords estratégicas para el negocio mostraron un progreso extraordinario.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Palabra Clave</th>
-                        <th><span class="tooltip">Volumen<span class="tooltiptext">El número promedio de veces que los usuarios buscan una palabra clave específica cada mes. Un volumen alto indica mayor interés.</span></span></th>
-                        <th>Posición Inicial</th>
-                        <th>Posición Final</th>
-                        <th>Cambio</th>
-                        <th><span class="tooltip">Tráfico Estimado (Final)<span class="tooltiptext">Una aproximación del número de visitas mensuales que esta palabra clave podría generar en su posición final.</span></span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="winner">
-                        <td>el mejor erp de chile</td>
-                        <td>n/a</td>
-                        <td>>100</td>
-                        <td>8</td>
-                        <td class="pos-up">▲ +92</td>
-                        <td>Alto Potencial</td>
-                    </tr>
-                    <tr class="winner">
-                        <td>erp chile</td>
-                        <td>480</td>
-                        <td>>100</td>
-                        <td>37</td>
-                        <td class="pos-up">▲ +64</td>
-                        <td>22</td>
-                    </tr>
-                    <tr class="winner">
-                        <td>erp cloud</td>
-                        <td>50</td>
-                        <td>>100</td>
-                        <td>37</td>
-                        <td class="pos-up">▲ +64</td>
-                        <td>~1</td>
-                    </tr>
-                    <tr class="winner">
-                        <td>oracle netsuite</td>
-                        <td>320</td>
-                        <td>>100</td>
-                        <td>15</td>
-                        <td class="pos-up">▲ +85</td>
-                        <td>3</td>
-                    </tr>
-                    <tr class="winner">
-                        <td>fullstep</td>
-                        <td>10</td>
-                        <td>>100</td>
-                        <td>4</td>
-                        <td class="pos-up">▲ +96</td>
-                        <td>~1</td>
-                    </tr>
-                    <tr>
-                        <td>oracle netsuite chile</td>
-                        <td>10</td>
-                        <td>6</td>
-                        <td>9</td>
-                        <td class="pos-down">▼ -3</td>
-                        <td>~1</td>
-                    </tr>
-                    <tr class="loser">
-                        <td>transformacion digital</td>
-                        <td>1.3k</td>
-                        <td>>100</td>
-                        <td>>100</td>
-                        <td class="pos-neutral">― 0</td>
-                        <td>0</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="grid-2-col">
-            <div class="card">
-                <h2>Mayores Ganadores del Mes</h2>
-                <div class="analysis-text">
-                    <ul class="list">
-                        <li><strong>el mejor erp de chile:</strong> Pasó de ser invisible a entrar en el Top 10. Es el mayor éxito y una gran oportunidad de negocio.</li>
-                        <li><strong>erp chile / erp cloud:</strong> Ambas escalaron más de 60 posiciones, posicionando a 2win.cl como un actor relevante para búsquedas genéricas de ERP.</li>
-                        <li><strong>oracle netsuite:</strong> Logró un posicionamiento sólido en la segunda página (posición 15), crucial para captar tráfico calificado de este producto específico.</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card">
-                <h2>Oportunidades de Mejora</h2>
-                <div class="analysis-text">
-                     <ul class="list">
-                        <li><strong>oracle netsuite chile:</strong> A pesar de estar en Top 10, tuvo una leve caída. Se debe monitorear para evitar que salga de la primera página.</li>
-                        <li><strong>transformacion digital:</strong> Con un volumen altísimo (1.3k), sigue sin posicionar. Representa la mayor oportunidad de crecimiento a futuro si se crea contenido específico.</li>
-                        <li><strong>Consolidar el Top 10:</strong> El siguiente paso es llevar las keywords que están en posiciones 15-40 hacia la primera página para multiplicar su impacto en el tráfico.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-         <div class="card">
-            <h2>Análisis de Competencia (Evolución de Visibilidad en Junio)</h2>
-            <p class="analysis-text">2win.cl fue uno de los dominios con mayor crecimiento porcentual en el mes. Aunque los líderes como `comparasoftware.cl` también crecieron, 2win.cl redujo la brecha significativamente, estableciéndose firmemente en el mapa competitivo.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Competidor</th>
-                        <th>Visibilidad Inicial</th>
-                        <th>Visibilidad Final</th>
-                        <th>Cambio en Junio</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>comparasoftware.cl</td>
-                        <td>~12%</td>
-                        <td>32.54%</td>
-                        <td class="pos-up">▲ Muy Fuerte</td>
-                    </tr>
-                    <tr>
-                        <td><strong>2win.cl</strong></td>
-                        <td><strong>1.13%</strong></td>
-                        <td><strong>8.35%</strong></td>
-                        <td class="pos-up"><strong>▲ Crecimiento Excepcional</strong></td>
-                    </tr>
-                     <tr>
-                        <td>enteldigital.cl</td>
-                        <td>~1.8%</td>
-                        <td>14.21%</td>
-                        <td class="pos-up">▲ Muy Fuerte</td>
-                    </tr>
-                    <tr>
-                        <td>defontana.com</td>
-                        <td>~1.15%</td>
-                        <td>10.13%</td>
-                        <td class="pos-up">▲ Fuerte</td>
-                    </tr>
-                    <tr>
-                        <td>manager.cl</td>
-                        <td>~2.17%</td>
-                        <td>7.12%</td>
-                        <td class="pos-up">▲ Fuerte</td>
-                    </tr>
-                     <tr>
-                        <td>latamreadychile.com</td>
-                        <td>~10.2%</td>
-                        <td>10.16%</td>
-                        <td class="pos-neutral">― Estable</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="card">
-            <h2>Páginas de Mejor Rendimiento (según Tráfico Estimado Wincher)</h2>
-            <p class="analysis-text">A finales de junio, el tráfico orgánico se distribuye principalmente entre las nuevas páginas posicionadas para términos comerciales, además de la home page.</p>
-             <table>
-                <thead>
-                    <tr>
-                        <th><span class="tooltip">Página de Destino (URL)<span class="tooltiptext">La URL específica de tu sitio web a la que llega un usuario después de hacer clic en un resultado de búsqueda.</span></span></th>
-                        <th>Tráfico Estimado</th>
-                        <th>Principal Palabra Clave</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>/ (Home Page)</td>
-                        <td>~20</td>
-                        <td>2win</td>
-                    </tr>
-                    <tr>
-                        <td>/mejor-erp-chile-2025-2026/</td>
-                        <td>~22</td>
-                        <td>erp chile</td>
-                    </tr>
-                    <tr>
-                        <td>/oracle-netsuite/</td>
-                        <td>~3</td>
-                        <td>oracle netsuite</td>
-                    </tr>
-                    <tr>
-                        <td>/tu-empresa-necesita-erp-chile/</td>
-                        <td>~1</td>
-                        <td>erp chile</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <footer>
-            <p>Reporte generado el 30 de Junio de 2025. Análisis basado en 39 reportes de Wincher y Semrush para el período del 1 al 30 de Junio de 2025.</p>
-        </footer>
-
     </div>
 
-    <script>
-        const ctx = document.getElementById('visibilityChart').getContext('2d');
-        const visibilityChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [
-                    'Jun 6', 'Jun 7', 'Jun 8', 'Jun 9', 'Jun 10', 'Jun 11', 'Jun 12', 'Jun 13', 'Jun 14',
-                    'Jun 15', 'Jun 16', 'Jun 17', 'Jun 18', 'Jun 19', 'Jun 20', 'Jun 21', 'Jun 22',
-                    'Jun 23', 'Jun 24', 'Jun 25', 'Jun 26', 'Jun 27', 'Jun 28', 'Jun 29', 'Jun 30'
+    <div class="card">
+        <h2>Evolución de Visibilidad Orgánica (Semrush %)</h2>
+        <div class="chart-container">
+            <canvas id="visibilityChart"></canvas>
+        </div>
+        <div class="analysis-text">
+            <p>El gráfico ilustra claramente la trayectoria del mes. La visibilidad se mantuvo estable y baja durante las primeras dos semanas. El punto de inflexión ocurrió a partir del 18 de junio, con un crecimiento constante que alcanzó su <strong>pico máximo de 16.63% el 28 de junio</strong>. Este pico se correlaciona directamente con la mejora en el ranking de palabras clave de alto volumen. El ligero ajuste a la baja al final del mes es normal y refleja la volatilidad de las <span class="tooltip">SERPs<span class="tooltiptext">Página de Resultados del Motor de Búsqueda (del inglés Search Engine Results Page). Es la página que Google te muestra después de que realizas una búsqueda.</span></span>, estabilizándose en una nueva base mucho más alta que al principio.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Análisis Profundo de Palabras Clave</h2>
+        
+        <h3><span class="tooltip">Palabras Clave de Marca<span class="tooltiptext">Términos de búsqueda que incluyen el nombre de tu empresa o una variación del mismo, como '2win' o '2win chile'.</span></span></h3>
+        <p>El rendimiento de la palabra clave de marca se mantuvo estable, garantizando la primera posición, lo cual es fundamental.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Palabra Clave</th>
+                    <th><span class="tooltip">Volumen<span class="tooltiptext">El número promedio de veces que los usuarios buscan una palabra clave específica cada mes en un país determinado.</span></span></th>
+                    <th>Posición Inicial</th>
+                    <th>Posición Final</th>
+                    <th>Cambio</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2win</td>
+                    <td>70</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td class="pos-neutral">― 0</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 style="margin-top: 30px;">Palabras Clave Comerciales</h3>
+        <p>Aquí se observa el mayor impacto del mes. Keywords estratégicas para el negocio mostraron un progreso extraordinario.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Palabra Clave</th>
+                    <th><span class="tooltip">Volumen<span class="tooltiptext">El número promedio de veces que los usuarios buscan una palabra clave específica cada mes. Un volumen alto indica mayor interés.</span></span></th>
+                    <th>Posición Inicial</th>
+                    <th>Posición Final</th>
+                    <th>Cambio</th>
+                    <th><span class="tooltip">Tráfico Estimado (Final)<span class="tooltiptext">Una aproximación del número de visitas mensuales que esta palabra clave podría generar en su posición final.</span></span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="winner">
+                    <td>el mejor erp de chile</td>
+                    <td>n/a</td>
+                    <td>>100</td>
+                    <td>8</td>
+                    <td class="pos-up">▲ +92</td>
+                    <td>Alto Potencial</td>
+                </tr>
+                <tr class="winner">
+                    <td>erp chile</td>
+                    <td>480</td>
+                    <td>>100</td>
+                    <td>37</td>
+                    <td class="pos-up">▲ +64</td>
+                    <td>22</td>
+                </tr>
+                <tr class="winner">
+                    <td>erp cloud</td>
+                    <td>50</td>
+                    <td>>100</td>
+                    <td>37</td>
+                    <td class="pos-up">▲ +64</td>
+                    <td>~1</td>
+                </tr>
+                <tr class="winner">
+                    <td>oracle netsuite</td>
+                    <td>320</td>
+                    <td>>100</td>
+                    <td>15</td>
+                    <td class="pos-up">▲ +85</td>
+                    <td>3</td>
+                </tr>
+                <tr class="winner">
+                    <td>fullstep</td>
+                    <td>10</td>
+                    <td>>100</td>
+                    <td>4</td>
+                    <td class="pos-up">▲ +96</td>
+                    <td>~1</td>
+                </tr>
+                <tr>
+                    <td>oracle netsuite chile</td>
+                    <td>10</td>
+                    <td>6</td>
+                    <td>9</td>
+                    <td class="pos-down">▼ -3</td>
+                    <td>~1</td>
+                </tr>
+                <tr class="loser">
+                    <td>transformacion digital</td>
+                    <td>1.3k</td>
+                    <td>>100</td>
+                    <td>>100</td>
+                    <td class="pos-neutral">― 0</td>
+                    <td>0</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="grid-2-col">
+        <div class="card">
+            <h2>Mayores Ganadores del Mes</h2>
+            <div class="analysis-text">
+                <ul class="list">
+                    <li><strong>el mejor erp de chile:</strong> Pasó de ser invisible a entrar en el Top 10. Es el mayor éxito y una gran oportunidad de negocio.</li>
+                    <li><strong>erp chile / erp cloud:</strong> Ambas escalaron más de 60 posiciones, posicionando a 2win.cl como un actor relevante para búsquedas genéricas de ERP.</li>
+                    <li><strong>oracle netsuite:</strong> Logró un posicionamiento sólido en la segunda página (posición 15), crucial para captar tráfico calificado de este producto específico.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Oportunidades de Mejora</h2>
+            <div class="analysis-text">
+                <ul class="list">
+                    <li><strong>oracle netsuite chile:</strong> A pesar de estar en Top 10, tuvo una leve caída. Se debe monitorear para evitar que salga de la primera página.</li>
+                    <li><strong>transformacion digital:</strong> Con un volumen altísimo (1.3k), sigue sin posicionar. Representa la mayor oportunidad de crecimiento a futuro si se crea contenido específico.</li>
+                    <li><strong>Consolidar el Top 10:</strong> El siguiente paso es llevar las keywords que están en posiciones 15-40 hacia la primera página para multiplicar su impacto en el tráfico.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Análisis de Competencia (Evolución de Visibilidad en Junio)</h2>
+        <p class="analysis-text">2win.cl fue uno de los dominios con mayor crecimiento porcentual en el mes. Aunque los líderes como `comparasoftware.cl` también crecieron, 2win.cl redujo la brecha significativamente, estableciéndose firmemente en el mapa competitivo.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Competidor</th>
+                    <th>Visibilidad Inicial</th>
+                    <th>Visibilidad Final</th>
+                    <th>Cambio en Junio</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>comparasoftware.cl</td>
+                    <td>~12%</td>
+                    <td>32.54%</td>
+                    <td class="pos-up">▲ Muy Fuerte</td>
+                </tr>
+                <tr>
+                    <td><strong>2win.cl</strong></td>
+                    <td><strong>1.13%</strong></td>
+                    <td><strong>8.35%</strong></td>
+                    <td class="pos-up"><strong>▲ Crecimiento Excepcional</strong></td>
+                </tr>
+                <tr>
+                    <td>enteldigital.cl</td>
+                    <td>~1.8%</td>
+                    <td>14.21%</td>
+                    <td class="pos-up">▲ Muy Fuerte</td>
+                </tr>
+                <tr>
+                    <td>defontana.com</td>
+                    <td>~1.15%</td>
+                    <td>10.13%</td>
+                    <td class="pos-up">▲ Fuerte</td>
+                </tr>
+                <tr>
+                    <td>manager.cl</td>
+                    <td>~2.17%</td>
+                    <td>7.12%</td>
+                    <td class="pos-up">▲ Fuerte</td>
+                </tr>
+                <tr>
+                    <td>latamreadychile.com</td>
+                    <td>~10.2%</td>
+                    <td>10.16%</td>
+                    <td class="pos-neutral">― Estable</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="card">
+        <h2>Páginas de Mejor Rendimiento (según Tráfico Estimado Wincher)</h2>
+        <p class="analysis-text">A finales de junio, el tráfico orgánico se distribuye principalmente entre las nuevas páginas posicionadas para términos comerciales, además de la home page.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th><span class="tooltip">Página de Destino (URL)<span class="tooltiptext">La URL específica de tu sitio web a la que llega un usuario después de hacer clic en un resultado de búsqueda.</span></span></th>
+                    <th>Tráfico Estimado</th>
+                    <th>Principal Palabra Clave</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>/ (Home Page)</td>
+                    <td>~20</td>
+                    <td>2win</td>
+                </tr>
+                <tr>
+                    <td>/mejor-erp-chile-2025-2026/</td>
+                    <td>~22</td>
+                    <td>erp chile</td>
+                </tr>
+                <tr>
+                    <td>/oracle-netsuite/</td>
+                    <td>~3</td>
+                    <td>oracle netsuite</td>
+                </tr>
+                <tr>
+                    <td>/tu-empresa-necesita-erp-chile/</td>
+                    <td>~1</td>
+                    <td>erp chile</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p>Reporte generado el 30 de Junio de 2025. Análisis basado en 39 reportes de Wincher y Semrush para el período del 1 al 30 de Junio de 2025.</p>
+    </footer>
+
+</div>
+
+<script>
+    const ctx = document.getElementById('visibilityChart').getContext('2d');
+    const visibilityChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [
+                'Jun 6', 'Jun 7', 'Jun 8', 'Jun 9', 'Jun 10', 'Jun 11', 'Jun 12', 'Jun 13', 'Jun 14',
+                'Jun 15', 'Jun 16', 'Jun 17', 'Jun 18', 'Jun 19', 'Jun 20', 'Jun 21', 'Jun 22',
+                'Jun 23', 'Jun 24', 'Jun 25', 'Jun 26', 'Jun 27', 'Jun 28', 'Jun 29', 'Jun 30'
+            ],
+            datasets: [{
+                label: '% Visibilidad Orgánica (Semrush)',
+                data: [
+                    1.13, 1.13, 1.13, 1.13, 1.13, 1.13, 1.13, 1.14, 6.25,
+                    5.56, 5.74, 5.76, 5.71, 7.10, 7.52, 6.61, 7.44,
+                    7.35, 6.53, 6.51, 7.61, 9.96, 16.63, 8.63, 8.35
                 ],
-                datasets: [{
-                    label: '% Visibilidad Orgánica (Semrush)',
-                    data: [
-                        1.13, 1.13, 1.13, 1.13, 1.13, 1.13, 1.13, 1.14, 6.25,
-                        5.56, 5.74, 5.76, 5.71, 7.10, 7.52, 6.61, 7.44,
-                        7.35, 6.53, 6.51, 7.61, 9.96, 16.63, 8.63, 8.35
-                    ],
-                    backgroundColor: 'rgba(21, 101, 192, 0.2)',
-                    borderColor: '#1565c0',
-                    borderWidth: 3,
-                    tension: 0.4,
-                    fill: true,
-                    pointBackgroundColor: '#1565c0',
-                    pointRadius: 4,
-                    pointHoverRadius: 7
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return value.toFixed(1) + '%'
-                            },
-                            font: { size: 14 }
-                        }
-                    },
-                    x: {
-                        ticks: { font: { size: 14 } }
+                backgroundColor: 'rgba(21, 101, 192, 0.2)',
+                borderColor: '#1565c0',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: '#1565c0',
+                pointRadius: 4,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value.toFixed(1) + '%'
+                        },
+                        font: { size: 14 }
                     }
                 },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        enabled: true,
-                        backgroundColor: '#0d47a1',
-                        titleFont: { size: 16 },
-                        bodyFont: { size: 14 },
-                        padding: 15,
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed.y !== null) {
-                                    label += context.parsed.y.toFixed(2) + '%';
-                                }
-                                return label;
+                x: {
+                    ticks: { font: { size: 14 } }
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    enabled: true,
+                    backgroundColor: '#0d47a1',
+                    titleFont: { size: 16 },
+                    bodyFont: { size: 14 },
+                    padding: 15,
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
                             }
+                            if (context.parsed.y !== null) {
+                                label += context.parsed.y.toFixed(2) + '%';
+                            }
+                            return label;
                         }
                     }
                 }
             }
-        });
-    </script>
+        }
+    });
+</script>
 
 </body>
 </html>
