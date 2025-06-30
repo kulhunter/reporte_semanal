@@ -98,7 +98,7 @@
                 <div>
                     <h1 class="text-3xl font-bold text-gray-800">Dashboard de KPIs</h1>
                     <p class="text-gray-500 mt-1">Metas del 2º Semestre (Jul-Dic) con seguimiento desde Junio.</p>
-                    <p class="text-xs text-gray-400 mt-2">ID de Usuario: <span id="userId">Cargando...</span></p>
+                    <p class="text-xs text-gray-400 mt-2">ID de Usuario: <span id="userId">Conectando...</span></p>
                 </div>
                 <button id="toggle-charts-btn" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg shadow-sm transition">
                     Ocultar Evolución
@@ -191,46 +191,51 @@
         ];
 
         // --- AUTENTICACIÓN Y CARGA DE DATOS ---
-        onAuthStateChanged(auth, user => {
-            if (user) {
-                document.getElementById('critical-error-modal').style.display = 'none';
-                userId = user.uid;
-                document.getElementById('userId').textContent = userId;
-                loadInitialData();
-            } else {
-                signInAnonymously(auth).catch(error => {
-                    console.error("Anonymous sign-in failed:", error);
-                    document.getElementById('userId').textContent = "Error de conexión";
-                    if (error.code === 'auth/configuration-not-found') {
-                        showCriticalError(
-                            `<p class="mb-4">La aplicación no puede conectar a la base de datos porque el <strong>inicio de sesión anónimo no está habilitado</strong> en tu proyecto de Firebase.</p>
-                             <p class="mb-2"><strong>Solución:</strong></p>
-                             <ol class="list-decimal list-inside text-left mx-auto max-w-md">
-                                 <li class="mb-2">Ve a tu <a href="https://console.firebase.google.com/project/${firebaseConfig.projectId}/authentication/providers" target="_blank" class="text-blue-600 hover:underline font-semibold">Consola de Firebase</a>.</li>
-                                 <li class="mb-2">En la sección <strong>Authentication</strong>, ve a la pestaña <strong>Sign-in method</strong>.</li>
-                                 <li class="mb-2">Busca <strong>Anónimo</strong> en la lista, haz clic, activa el interruptor y guarda.</li>
-                                 <li class="mb-2">Recarga esta página.</li>
-                             </ol>`
-                        );
-                    } else {
-                         showCriticalError("Ocurrió un error de autenticación inesperado. Revisa la consola para más detalles.");
-                    }
-                });
-            }
-        });
+        function initializeAuth() {
+            onAuthStateChanged(auth, user => {
+                if (user) {
+                    document.getElementById('critical-error-modal').style.display = 'none';
+                    userId = user.uid;
+                    document.getElementById('userId').textContent = userId;
+                    loadInitialData();
+                } else {
+                    signInAnonymously(auth).catch(error => {
+                        console.error("Anonymous sign-in failed:", error);
+                        document.getElementById('userId').textContent = "Error de conexión";
+                        if (error.code === 'auth/configuration-not-found') {
+                            showCriticalError(
+                                `<p class="mb-4">La aplicación no puede conectar a la base de datos porque el <strong>inicio de sesión anónimo no está habilitado</strong> en tu proyecto de Firebase.</p>
+                                 <p class="mb-2"><strong>Solución:</strong></p>
+                                 <ol class="list-decimal list-inside text-left mx-auto max-w-md">
+                                     <li class="mb-2">Ve a tu <a href="https://console.firebase.google.com/project/${firebaseConfig.projectId}/authentication/providers" target="_blank" class="text-blue-600 hover:underline font-semibold">Consola de Firebase</a>.</li>
+                                     <li class="mb-2">En la sección <strong>Authentication</strong>, ve a la pestaña <strong>Sign-in method</strong>.</li>
+                                     <li class="mb-2">Busca <strong>Anónimo</strong> en la lista, haz clic, activa el interruptor y guarda.</li>
+                                     <li class="mb-2">Recarga esta página.</li>
+                                 </ol>`
+                            );
+                        } else {
+                             showCriticalError("Ocurrió un error de autenticación inesperado. Revisa la consola para más detalles.");
+                        }
+                    });
+                }
+            });
+        }
 
         function loadInitialData() {
             if (!userId) return;
             const collectionPath = `kpi_dashboard/${appId}/users/${userId}/weekly_kpis`;
             const q = query(collection(db, collectionPath));
             onSnapshot(q, (querySnapshot) => {
-                weeklyData = {};
+                const fetchedData = {};
                 querySnapshot.forEach((doc) => {
-                    weeklyData[doc.id] = doc.data();
+                    fetchedData[doc.id] = doc.data();
                 });
+                weeklyData = fetchedData;
+                // Re-render the entire dashboard with the new data
                 renderDashboard();
             }, (error) => {
                 console.error("Error fetching data with onSnapshot:", error);
+                showCriticalError("No se pudieron cargar los datos. Revisa las reglas de tu base de datos en Firebase.");
             });
         }
 
@@ -266,17 +271,16 @@
 
         function renderDashboard() {
             const grid = document.getElementById('kpi-grid');
+            const chartsVisible = document.getElementById('toggle-charts-btn').textContent.includes('Ocultar');
             grid.innerHTML = '';
 
             Object.values(chartInstances).forEach(chart => chart.destroy());
             chartInstances = {};
             
-            kpis.forEach((kpi, index) => {
-                // Calculate total accumulated from June onwards (week 22)
+            kpis.forEach((kpi) => {
                 const totalAccumulated = Object.values(weeklyData)
                     .reduce((sum, week) => sum + (Number(week[kpi.id]) || 0), 0);
 
-                // Calculate accumulated for goal from July onwards (week 27)
                 const goalAccumulated = Object.values(weeklyData)
                     .filter(week => week.week >= 27)
                     .reduce((sum, week) => sum + (Number(week[kpi.id]) || 0), 0);
@@ -298,7 +302,7 @@
                         </div>
                         <p class="text-right text-sm mt-2 font-medium">${totalProgress.toFixed(1)}%</p>
                     </div>
-                    <div class="chart-container mt-4 pt-4 border-t border-gray-200 flex-grow">
+                    <div class="chart-container mt-4 pt-4 border-t border-gray-200 flex-grow ${chartsVisible ? '' : 'hidden'}">
                         <div class="h-24 relative">
                             <canvas id="chart-${kpi.id}"></canvas>
                         </div>
@@ -309,10 +313,7 @@
 
             kpis.forEach(kpi => {
                 const ctx = document.getElementById(`chart-${kpi.id}`).getContext('2d');
-                const labels = [];
-                for (let i = 22; i <= 52; i++) {
-                    labels.push(`S${i}`);
-                }
+                const labels = Array.from({length: 31}, (_, i) => `S${i + 22}`);
                 const chartData = labels.map(label => {
                     const weekNum = label.substring(1);
                     const weekKey = `week_${weekNum}`;
@@ -349,9 +350,6 @@
                     }
                 });
             });
-            // Apply chart visibility state
-            const chartsVisible = document.getElementById('toggle-charts-btn').textContent.includes('Ocultar');
-            document.querySelectorAll('.chart-container').forEach(c => c.classList.toggle('hidden', !chartsVisible));
         }
         
         // --- MANEJO DE EVENTOS ---
@@ -367,9 +365,7 @@
         toggleChartsBtn.addEventListener('click', () => {
             const charts = document.querySelectorAll('.chart-container');
             const isHidden = charts[0]?.classList.contains('hidden');
-            charts.forEach(chart => {
-                chart.classList.toggle('hidden', !isHidden);
-            });
+            charts.forEach(chart => chart.classList.toggle('hidden', !isHidden));
             toggleChartsBtn.textContent = isHidden ? 'Ocultar Evolución' : 'Ver Evolución';
         });
 
@@ -410,7 +406,7 @@
             for(let [key, value] of formData.entries()) dataToSave[key] = parseFloat(value) || 0;
             
             try {
-                await setDoc(doc(db, collectionPath, docId), dataToSave);
+                await setDoc(doc(db, collectionPath, docId), dataToSave, { merge: true });
                 saveBtn.textContent = '¡Guardado!';
                 saveBtn.classList.add('bg-green-500', 'hover:bg-green-600');
                 saveBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
@@ -434,6 +430,8 @@
         // --- INICIALIZACIÓN ---
         window.onload = () => {
             populateWeekSelector();
+            renderDashboard(); // Dibuja la estructura vacía inmediatamente
+            initializeAuth();   // Inicia la conexión a Firebase para obtener los datos
         };
 
     </script>
