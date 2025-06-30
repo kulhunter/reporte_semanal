@@ -18,6 +18,8 @@
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             padding: 1.5rem;
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
         .progress-bar-bg {
             background-color: #e5e7eb;
@@ -157,6 +159,7 @@
 
         let userId = null;
         let weeklyData = {};
+        let chartInstances = {}; // To keep track of charts
 
         const kpis = [
             { id: 'leads', name: 'Leads', weeklyGoal: 2.5, totalGoal: 60, format: 'float' },
@@ -244,25 +247,104 @@
         function renderDashboard() {
             const grid = document.getElementById('kpi-grid');
             grid.innerHTML = '';
+
+            // Destroy old charts before re-rendering
+            Object.values(chartInstances).forEach(chart => chart.destroy());
+            chartInstances = {};
+            
             const totalAccumulated = kpis.map(kpi => Object.values(weeklyData).reduce((sum, week) => sum + (Number(week[kpi.id]) || 0), 0));
+            
             kpis.forEach((kpi, index) => {
                 const accumulated = totalAccumulated[index];
                 const totalProgress = kpi.totalGoal > 0 ? (accumulated / kpi.totalGoal) * 100 : 0;
+                
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
-                    <h3 class="font-semibold text-lg text-gray-800">${kpi.name}</h3>
-                    <p class="text-gray-500 text-sm mb-4">Meta Semanal: ${kpi.weeklyGoal}</p>
-                    <div class="text-center my-4">
-                        <p class="text-3xl font-bold text-indigo-600">${accumulated.toLocaleString('es-ES')}</p>
-                        <p class="text-gray-500">de ${kpi.totalGoal.toLocaleString('es-ES')} (Total)</p>
+                    <div>
+                        <h3 class="font-semibold text-lg text-gray-800">${kpi.name}</h3>
+                        <p class="text-gray-500 text-sm mb-4">Meta Semanal: ${kpi.weeklyGoal.toLocaleString('es-ES')}</p>
+                        <div class="text-center my-4">
+                            <p class="text-3xl font-bold text-indigo-600">${accumulated.toLocaleString('es-ES')}</p>
+                            <p class="text-gray-500">de ${kpi.totalGoal.toLocaleString('es-ES')} (Total)</p>
+                        </div>
+                        <div class="w-full progress-bar-bg h-4">
+                            <div class="progress-bar h-4" style="width: ${Math.min(totalProgress, 100)}%;"></div>
+                        </div>
+                        <p class="text-right text-sm mt-2 font-medium">${totalProgress.toFixed(1)}%</p>
                     </div>
-                    <div class="w-full progress-bar-bg h-4">
-                        <div class="progress-bar h-4" style="width: ${Math.min(totalProgress, 100)}%;"></div>
+                    <div class="mt-4 pt-4 border-t border-gray-200 flex-grow">
+                        <div class="h-24 relative">
+                            <canvas id="chart-${kpi.id}"></canvas>
+                        </div>
                     </div>
-                    <p class="text-right text-sm mt-2 font-medium">${totalProgress.toFixed(1)}%</p>
                 `;
                 grid.appendChild(card);
+            });
+
+            // Create charts after cards are in the DOM
+            kpis.forEach(kpi => {
+                const ctx = document.getElementById(`chart-${kpi.id}`).getContext('2d');
+                
+                const labels = [];
+                for (let i = 27; i <= 52; i++) {
+                    labels.push(`S${i}`);
+                }
+
+                const chartData = labels.map(label => {
+                    const weekNum = label.substring(1);
+                    const weekKey = `week_${weekNum}`;
+                    return weeklyData[weekKey]?.[kpi.id] || 0;
+                });
+
+                chartInstances[kpi.id] = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: kpi.name,
+                            data: chartData,
+                            borderColor: 'rgba(79, 70, 229, 0.8)',
+                            backgroundColor: 'rgba(199, 210, 254, 0.3)',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 1,
+                            pointBackgroundColor: 'rgba(79, 70, 229, 0.8)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { display: false },
+                                grid: { display: false },
+                                border: { display: false }
+                            },
+                            x: {
+                                ticks: { display: false },
+                                grid: { display: false },
+                                border: { display: false }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                callbacks: {
+                                    title: function(context) {
+                                        const weekNum = context[0].label.substring(1);
+                                        return `Semana ${weekNum}`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
             });
         }
         
