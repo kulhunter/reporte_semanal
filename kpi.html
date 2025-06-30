@@ -91,7 +91,68 @@
     </style>
 </head>
 <body class="p-4 md:p-8">
+<style>
+    /* Estilos para el contenedor del header */
+    .report-header {
+        background-color: #ffffff;
+        padding: 12px 20px;
+        text-align: center;
+        margin-bottom: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border: 1px solid #e0e0e0;
+    }
+    /* Estilos para los botones de navegación */
+    .report-header .nav-btn {
+        color: #334155; /* Color de texto oscuro */
+        background-color: #f1f5f9; /* Fondo gris claro */
+        text-decoration: none;
+        padding: 10px 20px;
+        margin: 0 8px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-size: 1em;
+        transition: all 0.2s ease-in-out;
+        border: 2px solid transparent;
+    }
+    /* Efecto al pasar el mouse por encima */
+    .report-header .nav-btn:hover {
+        background-color: #e2e8f0;
+        transform: translateY(-2px);
+    }
+    /* Estilo especial para el botón de la página ACTIVA */
+    .report-header .nav-btn.active {
+        background-color: #1a237e; /* Color primario oscuro */
+        color: #ffffff;
+        cursor: default;
+        box-shadow: 0 2px 8px rgba(26, 35, 126, 0.4);
+    }
+</style>
 
+<header class="report-header">
+    <a href="https://kulhunter.github.io/reporte_semanal/" class="nav-btn">Resumen Semanal</a>
+    <a href="https://kulhunter.github.io/reporte_semanal/keywords.html" class="nav-btn">Resumen de Keywords</a>
+    <a href="https://kulhunter.github.io/reporte_semanal/kpi.html" class="nav-btn">Evolución KPIs</a>
+</header>
+
+<script>
+    /* Este script encuentra en qué página estás y le aplica el estilo "active" al botón correspondiente */
+    document.addEventListener("DOMContentLoaded", function() {
+        const currentPagePath = window.location.pathname;
+        const navLinks = document.querySelectorAll('.report-header .nav-btn');
+
+        navLinks.forEach(link => {
+            const linkPath = new URL(link.href).pathname;
+
+            // Compara las rutas para ver si coinciden
+            // La condición especial (currentPagePath.endsWith('/')) es para la página principal
+            if (currentPagePath === linkPath || (currentPagePath.endsWith('/') && linkPath.endsWith('/reporte_semanal/'))) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
     <div class="max-w-7xl mx-auto">
         <header class="mb-8">
             <div class="flex justify-between items-start">
