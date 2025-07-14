@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte de Rendimiento Digital - 2win.cl</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <style>
         :root {
             --primary-color: #1a237e;
@@ -46,10 +43,8 @@
             margin: 0 8px;
             border-radius: 8px;
             font-weight: 600;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             font-size: 1em;
             transition: all 0.2s ease-in-out;
-            border: 2px solid transparent;
         }
         .report-header .nav-btn:hover {
             background-color: #e2e8f0;
@@ -173,7 +168,7 @@
             <div class="insights" style="margin-top: 20px;">
                 <h4>Análisis de la Tendencia</h4>
                 <ul>
-                    <li>El gráfico muestra la evolución completa de la visibilidad SEO. Se observa un crecimiento inicial, un peak de visibilidad el 28 de junio (coincidiendo con el final de las campañas de Ads que incluían búsquedas de marca) y una posterior estabilización en un nuevo nivel base, más alto que a principios de junio.</li>
+                    <li>El gráfico muestra la evolución completa de la visibilidad SEO. Se observa un crecimiento inicial, un peak de visibilidad el 28 de junio y una posterior estabilización en un nuevo nivel base, más alto que a principios de junio.</li>
                     <li>La línea roja vertical marca el **28 de Junio**, fecha en que se detuvieron las campañas de Ads. Esto permite analizar el rendimiento 100% orgánico a partir de ese punto.</li>
                 </ul>
             </div>
@@ -231,14 +226,16 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    Chart.register(ChartDataLabels, Chart.Annotation);
-    Chart.defaults.plugins.datalabels.display = false; // Desactivar etiquetas por defecto
+document.addEventListener('DOMContentLoaded', function() {
+    // Configuración global para los gráficos
+    Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
+    Chart.defaults.font.size = 14;
+    Chart.defaults.color = '#333';
 
     // 1. Gráfico Principal de Evolución SEO
-    const mainSeoCtx = document.getElementById('mainSeoEvolutionChart')?.getContext('2d');
+    const mainSeoCtx = document.getElementById('mainSeoEvolutionChart');
     if (mainSeoCtx) {
-        new Chart(mainSeoCtx, {
+        new Chart(mainSeoCtx.getContext('2d'), {
             type: 'line',
             data: {
                 labels: ['Jun 6', 'Jun 14', 'Jun 22', 'Jun 28', 'Jul 2', 'Jul 6', 'Jul 14'],
@@ -249,41 +246,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     backgroundColor: 'rgba(26, 35, 126, 0.1)',
                     fill: true,
                     tension: 0.4,
-                    pointRadius: 5,
-                    pointBackgroundColor: 'var(--primary-color)'
                 }]
             },
             options: {
-                responsive: true, maintainAspectRatio: false,
-                scales: { 
-                    y: { 
-                        beginAtZero: true, 
-                        title: { display: true, text: 'Visibilidad (%)' } 
-                    } 
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
                 },
-                plugins: { 
-                    legend: { display: false },
-                    title: { display: false },
-                    tooltip: { callbacks: { label: (c) => `Visibilidad: ${c.raw.toFixed(2)}%` } },
-                    annotation: {
-                        annotations: {
-                            line1: {
-                                type: 'line',
-                                xMin: 'Jun 28',
-                                xMax: 'Jun 28',
-                                borderColor: 'var(--danger-color)',
-                                borderWidth: 2,
-                                borderDash: [6, 6],
-                                label: {
-                                    content: 'Fin de Campañas Ads',
-                                    display: true,
-                                    position: 'start',
-                                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                                    color: 'var(--danger-color)',
-                                    font: { weight: 'bold' }
-                                }
-                            }
-                        }
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Visibilidad (%)' }
                     }
                 }
             }
@@ -291,81 +265,74 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 2. Gráfico de Canales de Adquisición
-    const trafficSourceCtx = document.getElementById('trafficSourceChart')?.getContext('2d');
+    const trafficSourceCtx = document.getElementById('trafficSourceChart');
     if (trafficSourceCtx) {
-        new Chart(trafficSourceCtx, {
+        new Chart(trafficSourceCtx.getContext('2d'), {
             type: 'doughnut',
             data: {
                 labels: ['Búsqueda Orgánica', 'Directo', 'Social Orgánico', 'Referido'],
                 datasets: [{
                     label: 'Sesiones',
                     data: [133, 68, 22, 22],
-                    backgroundColor: ['#1a237e', '#42a5f5', '#7e57c2', '#26c6da']
+                    backgroundColor: ['#1a237e', '#42a5f5', '#7e57c2', '#26c6da'],
+                    hoverOffset: 4
                 }]
             },
             options: {
-                responsive: true, maintainAspectRatio: false,
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'bottom' },
-                    title: { display: false },
-                    datalabels: {
-                        display: true,
-                        color: 'white',
-                        font: { weight: 'bold' },
-                        formatter: (value, ctx) => {
-                            const total = ctx.chart.getDatasetMeta(0).total;
-                            const percentage = (value / total * 100).toFixed(1) + '%';
-                            return percentage;
-                        }
-                    }
+                    legend: { position: 'bottom' }
                 }
             }
         });
     }
 
     // 3. Gráfico de Páginas más Vistas
-    const topPagesCtx = document.getElementById('topPagesChart')?.getContext('2d');
+    const topPagesCtx = document.getElementById('topPagesChart');
     if (topPagesCtx) {
-        new Chart(topPagesCtx, {
+        new Chart(topPagesCtx.getContext('2d'), {
             type: 'bar',
             data: {
                 labels: ['Oracle NetSuite LATAM', 'Oracle NetSuite Chile', 'Contáctanos', 'Quiénes Somos', 'Dashboard CFOs'],
                 datasets: [{
                     label: 'Vistas',
                     data: [110, 56, 27, 24, 21],
-                    backgroundColor: '#42a5f5'
+                    backgroundColor: '#42a5f5',
+                    borderRadius: 4
                 }]
             },
             options: {
                 indexAxis: 'y',
-                responsive: true, maintainAspectRatio: false,
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
-                    legend: { display: false },
-                    title: { display: false }
+                    legend: { display: false }
                 }
             }
         });
     }
 
     // 4. Gráfico de Audiencia en LinkedIn
-    const linkedinSeniorityCtx = document.getElementById('linkedinSeniorityChart')?.getContext('2d');
+    const linkedinSeniorityCtx = document.getElementById('linkedinSeniorityChart');
     if (linkedinSeniorityCtx) {
-        new Chart(linkedinSeniorityCtx, {
+        new Chart(linkedinSeniorityCtx.getContext('2d'), {
             type: 'bar',
             data: {
                 labels: ["Director", "Dueño", "Socio", "Gerente", "Coordinador"],
                 datasets: [{
-                    label: 'Seguidores por Nivel de Responsabilidad',
+                    label: 'Seguidores',
                     data: [131, 33, 21, 19, 10],
                     backgroundColor: ['#1a237e', '#1e88e5', '#42a5f5', '#90caf9', '#bbdefb'],
                     borderRadius: 4
                 }]
             },
             options: { 
-                responsive: true, maintainAspectRatio: false, 
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
-                    legend: {display: false},
-                    title: { display: true, text: 'Nivel de Responsabilidad de la Audiencia (LinkedIn)', font: {size: 16}},
+                    legend: { display: false },
+                    title: { display: true, text: 'Nivel de Responsabilidad de la Audiencia (LinkedIn)', font: { size: 16 }}
                 } 
             }
         });
